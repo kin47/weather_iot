@@ -2,18 +2,19 @@
 <html lang="en">
 
 <head>
-  	<!-- Required meta tags -->
-  	<meta charset="utf-8">
-  	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  	<title>Dashboard</title>
-  	<link rel="stylesheet" href="/css/style.css">
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Dashboard</title>
+	<link rel="stylesheet" href="/css/style.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 	<link rel="icon" type="image/x-icon" href="/img/ptit.png">
 </head>
+
 <body>
-  	<div class="container-scroller">
-    <!-- partial:partials/_navbar.html -->
-    <!-- partial -->
+	<div class="container-scroller">
+		<!-- partial:partials/_navbar.html -->
+		<!-- partial -->
 		<nav class="navbar-breadcrumb col-xl-12 col-12 d-flex flex-row p-0">
 			<div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
 				<ul class="navbar-nav mr-lg-2">
@@ -22,7 +23,7 @@
 					</li>
 					<li class="nav-item">
 						<div class="d-flex align-items-baseline">
-						<p class="mb-0">Giám sát và dự báo thời tiết</p>
+							<p class="mb-0">Giám sát và dự báo thời tiết</p>
 						</div>
 					</li>
 				</ul>
@@ -30,140 +31,141 @@
 				</ul>
 			</div>
 		</nav>
-    <div class="container-fluid page-body-wrapper">
-	<nav class="sidebar sidebar-offcanvas" id="sidebar">
-        <ul class="nav">
-			<li class="nav-item">
-            	<a class="nav-link" href="index.html">
-					Trang chủ
-            	</a>
-          	</li>
-			  <li class="nav-item">
-            	<a class="nav-link" href="allData.html">
-					Tất cả dữ liệu
-				</a>
-          	</li>
-			  <li class="nav-item">
-            	<a class="nav-link" href="action.html">
-					Lịch sử thao tác
-				</a>
-          	</li>
-          	<li class="nav-item">
-            	<a class="nav-link" href="profile.html">
-					Thông tin cá nhân
-				</a>
-          	</li>
-			<li class="nav-item">
-            	<a class="nav-link" style="color: var(--red);" href="">
-					Đăng xuất
-				</a>
-          	</li>
-        </ul>
-      </nav>
-      <!-- partial -->
-      <div class="main-panel">
-        <div class="content-wrapper">
+		<div class="container-fluid page-body-wrapper">
+			<nav class="sidebar sidebar-offcanvas" id="sidebar">
+				<ul class="nav">
+					<li class="nav-item">
+						<a class="nav-link" href="index.html">
+							Trang chủ
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="all_data.html">
+							Tất cả dữ liệu
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="action.html">
+							Lịch sử thao tác
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="profile.html">
+							Thông tin cá nhân
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" style="color: var(--red);" href="">
+							Đăng xuất
+						</a>
+					</li>
+				</ul>
+			</nav>
+			<!-- partial -->
+			<div class="main-panel">
+				<div class="content-wrapper">
 
-			<div class="row mb-4">
-                <div class="row">
-                    <div class="stretch-card width-24" id="temperatureBackground">
-                        <div class="card color-white">
-                            <div class="card-body">
-                                <div class="temperature">
-                                    <p class="temperature-label">Nhiệt độ:</p>
-                                    <p id="temperature-result">loading</p>
-                                    <img class="height-50 float-right" src="/img/celsius.png" alt="">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="stretch-card width-24" id="humidity-background">
-                        <div class="card color-white">
-                            <div class="card-body">
-                                <div class="humidity">
-                                    <p class="humidity-label">Độ ẩm:</p>
-                                    <p id="humidity-result">loading</p>
-                                    <img class="height-50 float-right" src="/img/humidity.png">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="stretch-card width-24" id="light-background">
-                        <div class="card">
-                            <div class="card-body">
-								<div class="light">
-									<p class="light-label">Ánh sáng: </p>
-									<p id="light-result">loading</p>
-									<img class="height-50 float-right" src="/img/light.png">
+					<div class="row mb-4">
+						<div class="row">
+							<div class="stretch-card width-24" id="temperatureBackground">
+								<div class="card color-white">
+									<div class="card-body">
+										<div class="temperature">
+											<p class="temperature-label">Nhiệt độ:</p>
+											<p id="temperature-result">loading</p>
+											<img class="height-50 float-right" src="/img/celsius.png" alt="">
+										</div>
+									</div>
 								</div>
-                            </div>
-                        </div>
-                    </div>
+							</div>
 
-					<div class="stretch-card width-24" id="air-pressure-background">
-                        <div class="card">
-                            <div class="card-body">
-								<div class="air-pressure">
-									<p class="air-pressure-label">Áp suất: </p>
-									<p id="air-pressure-result">loading</p>
-									<img class="height-50 float-right" src="/img/air-pressure.png">
+							<div class="stretch-card width-24" id="humidity-background">
+								<div class="card color-white">
+									<div class="card-body">
+										<div class="humidity">
+											<p class="humidity-label">Độ ẩm:</p>
+											<p id="humidity-result">loading</p>
+											<img class="height-50 float-right" src="/img/humidity.png">
+										</div>
+									</div>
 								</div>
-                            </div>
-                        </div>
-                    </div>
+							</div>
 
-				<div class="row h-100"></div>
+							<div class="stretch-card width-24" id="light-background">
+								<div class="card">
+									<div class="card-body">
+										<div class="light">
+											<p class="light-label">Ánh sáng: </p>
+											<p id="light-result">loading</p>
+											<img class="height-50 float-right" src="/img/light.png">
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="stretch-card width-24" id="air-pressure-background">
+								<div class="card">
+									<div class="card-body">
+										<div class="air-pressure">
+											<p class="air-pressure-label">Áp suất: </p>
+											<p id="air-pressure-result">loading</p>
+											<img class="height-50 float-right" src="/img/air-pressure.png">
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="row h-100"></div>
+						</div>
+					</div>
+
+					<div class="row mb-4">
+						<div class="card width-70 height-800">
+							<div class="card-body">
+								<div class="d-flex justify-content-between align-items-start flex-wrap">
+									<div>
+										<p class="mb-3">Biểu đồ nhiệt độ - độ ẩm - ánh sáng - áp suất</p>
+									</div>
+								</div>
+
+								<div class="graph-container">
+									<canvas id="temperatureGraph" class="graph"></canvas>
+								</div>
+							</div>
+						</div>
+
+						<div class="card width-27">
+							<div class="height-50pt text-center position-relative">
+								<p style="margin-top: 50px;">Đèn 1:</p>
+								<p id="led-result-1">Sáng</p>
+								<div class="o-vuong" id="led-background-1" onclick="led_on_off(1)">
+									<img src="/img/led.png" class="with-100" alt="">
+								</div>
+							</div>
+							<div style="border-bottom: 1px solid black;"></div>
+							<div class="height-50pt text-center position-relative">
+								<p style="margin-top: 50px;">Đèn 2:</p>
+								<p id="led-result-2">Sáng</p>
+								<div class="o-vuong" id="led-background-2" onclick="led_on_off(2)">
+									<img src="/img/fan.png" class="with-100" alt="">
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
 			</div>
 		</div>
-
-        <div class="row mb-4">
-			<div class="card width-70 height-800">
-				<div class="card-body">
-				  <div class="d-flex justify-content-between align-items-start flex-wrap">
-					<div>
-					  <p class="mb-3">Biểu đồ nhiệt độ - độ ẩm - ánh sáng - áp suất</p>
-					</div>
-				  </div>
-				  
-				  <div class="graph-container">
-				  <canvas id="temperatureGraph" class="graph"></canvas>
-				  </div>
-				</div>
-            </div>
-
-			<div class="card width-27">
-				<div class="height-50pt text-center position-relative">
-					<p style="margin-top: 50px;">Đèn 1:</p>
-					<p id="led-result-1">Sáng</p>
-					<div class="o-vuong" id="led-background-1" onclick="led_on_off(1)">
-						<img src="/img/led.png" class="with-100" alt="">
-					</div>
-				</div>
-				<div style="border-bottom: 1px solid black;"></div>
-				<div class="height-50pt text-center position-relative">
-					<p style="margin-top: 50px;">Đèn 2:</p>
-					<p id="led-result-2">Sáng</p>
-					<div class="o-vuong" id="led-background-2" onclick="led_on_off(2)">
-						<img src="/img/fan.png" class="with-100" alt="">
-					</div>
-				</div>
-			</div>
-		</div>
-
-        </div>
-      </div>
-    </div>
-    </div>
+	</div>
 	<script src="/js/chart.min.js"></script>
 	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 	<script src="/js/led.js"></script>
-    <script src="/js/humidity.js"></script>
-    <script src="/js/graph.js"></script>
-  	<script src="/js/temperature.js"></script>
+	<script src="/js/humidity.js"></script>
+	<script src="/js/graph.js"></script>
+	<script src="/js/temperature.js"></script>
 	<script src="/js/air_pressure.js"></script>
 	<script src="/js/main.js"></script>
 	<script src="/js/light.js"></script>
 </body>
+
 </html>

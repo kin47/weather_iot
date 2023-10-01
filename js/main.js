@@ -3,16 +3,16 @@ const humidities = [0, 0, 0, 0, 0, 0, 0];
 const lights = [0, 0, 0, 0, 0, 0, 0];
 const airPressures = [0, 0, 0, 0, 0, 0, 0];
 const graphName = "temperatureGraph"
-let ledStatus = [0,0]
+let ledStatus = [0, 0]
 let timeReload = 0;
-var labels = ['','','','','','','']
+var labels = ['', '', '', '', '', '', '']
 var myChart2;
 drawGraph();
 
-async function main(){
+async function main() {
     setInterval(async () => {
         await getTemperature()
-        await getHumidity() 
+        await getHumidity()
         await getLightStatus()
         await getAirPressureStatus()
 
@@ -26,7 +26,7 @@ async function main(){
 }
 main()
 
-async function fetchData(url){
+async function fetchData(url) {
     const response = await fetch(url)
     return await response.json()
 }
