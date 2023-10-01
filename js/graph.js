@@ -22,10 +22,18 @@ function drawGraph(){
                     tension: 0.4
                 },
                 {
-                    label: "Ánh sáng (%)",
+                    label: "Ánh sáng (lx)",
                     data: lights,
                     borderColor: "#edf506",
                     backgroundColor: "#edf506",
+                    tension: 0.4,
+                    yAxisID: 'y2'
+                },
+                {
+                    label: "Áp suất (hPa)",
+                    data: airPressures,
+                    borderColor: "#3cdfff",
+                    backgroundColor: "#3cdfff",
                     tension: 0.4,
                     yAxisID: 'y2'
                 }

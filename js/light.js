@@ -4,18 +4,21 @@ async function getLightStatus(){
     lights.push(newLight)
 
     var lightResult = document.querySelector("#light-result")
-    lightResult.innerHTML = newLight + ""
+    lightResult.innerHTML = newLight + " lx"
 
-    var classess = "stretch-card width-33 "
+    var classess = "stretch-card width-24 "
     var lightBackground = document.querySelector("#light-background")
-    if(newLight >= 70){
-        classess += "light-70"
+    if(newLight >= 1000){
+        classess += "light-1000"
+    } 
+    else if(newLight >= 750){
+        classess += "light-750"
     }
-    else if(newLight >= 50){
-        classess += "light-50"
+    else if(newLight >= 500){
+        classess += "light-500"
     }
-    else if(newLight >= 30){
-        classess += "light-30"
+    else if(newLight >= 250){
+        classess += "light-250"
     }
     else{
         classess += "light-0"

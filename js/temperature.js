@@ -8,7 +8,7 @@ async function getTemperature(){
 
     //chỉnh màu nền cho ô này tùy theo nhiệt độ
     var temperatureBackground = document.querySelector("#temperatureBackground")
-    var classes = "stretch-card width-33"
+    var classes = "stretch-card width-24"
     if(newTemperature >= 70)
         classes += " temperature-70"
     else if(newTemperature >= 50)
