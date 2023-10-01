@@ -8,7 +8,7 @@ async function getHumidity(){
 
     //Thay đổi background
     var humidityBackground = document.querySelector("#humidity-background")
-    var classes = "stretch-card width-33"
+    var classes = "stretch-card width-24"
     if(newHumidity >= 70)
         classes += " humidity-70"
     else if(newHumidity >= 50)

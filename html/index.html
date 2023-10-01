@@ -5,9 +5,10 @@
   	<!-- Required meta tags -->
   	<meta charset="utf-8">
   	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  	<title>Dash board</title>
+  	<title>Dashboard</title>
   	<link rel="stylesheet" href="/css/style.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+	<link rel="icon" type="image/x-icon" href="/img/ptit.png">
 </head>
 <body>
   	<div class="container-scroller">
@@ -21,7 +22,7 @@
 					</li>
 					<li class="nav-item">
 						<div class="d-flex align-items-baseline">
-						<p class="mb-0">Trang chủ</p>
+						<p class="mb-0">Giám sát và dự báo thời tiết</p>
 						</div>
 					</li>
 				</ul>
@@ -33,7 +34,7 @@
 	<nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
 			<li class="nav-item">
-            	<a class="nav-link" href="/index.html">
+            	<a class="nav-link" href="index.html">
 					Trang chủ
             	</a>
           	</li>
@@ -52,6 +53,11 @@
 					Thông tin cá nhân
 				</a>
           	</li>
+			<li class="nav-item">
+            	<a class="nav-link" style="color: var(--red);" href="">
+					Đăng xuất
+				</a>
+          	</li>
         </ul>
       </nav>
       <!-- partial -->
@@ -60,7 +66,7 @@
 
 			<div class="row mb-4">
                 <div class="row">
-                    <div class="stretch-card width-33" id="temperatureBackground">
+                    <div class="stretch-card width-24" id="temperatureBackground">
                         <div class="card color-white">
                             <div class="card-body">
                                 <div class="temperature">
@@ -72,7 +78,7 @@
                         </div>
                     </div>
 
-                    <div class="stretch-card width-33" id="humidity-background">
+                    <div class="stretch-card width-24" id="humidity-background">
                         <div class="card color-white">
                             <div class="card-body">
                                 <div class="humidity">
@@ -84,13 +90,25 @@
                         </div>
                     </div>
 
-                    <div class="stretch-card width-33" id="light-background">
+                    <div class="stretch-card width-24" id="light-background">
                         <div class="card">
                             <div class="card-body">
 								<div class="light">
-									<p class="light-label">Độ sáng: </p>
+									<p class="light-label">Ánh sáng: </p>
 									<p id="light-result">loading</p>
 									<img class="height-50 float-right" src="/img/light.png">
+								</div>
+                            </div>
+                        </div>
+                    </div>
+
+					<div class="stretch-card width-24" id="air-pressure-background">
+                        <div class="card">
+                            <div class="card-body">
+								<div class="air-pressure">
+									<p class="air-pressure-label">Áp suất: </p>
+									<p id="air-pressure-result">loading</p>
+									<img class="height-50 float-right" src="/img/air-pressure.png">
 								</div>
                             </div>
                         </div>
@@ -105,7 +123,7 @@
 				<div class="card-body">
 				  <div class="d-flex justify-content-between align-items-start flex-wrap">
 					<div>
-					  <p class="mb-3">Biểu đồ nhiệt độ</p>
+					  <p class="mb-3">Biểu đồ nhiệt độ - độ ẩm - ánh sáng - áp suất</p>
 					</div>
 				  </div>
 				  
@@ -144,6 +162,7 @@
     <script src="/js/humidity.js"></script>
     <script src="/js/graph.js"></script>
   	<script src="/js/temperature.js"></script>
+	<script src="/js/air_pressure.js"></script>
 	<script src="/js/main.js"></script>
 	<script src="/js/light.js"></script>
 </body>

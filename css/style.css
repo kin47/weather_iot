@@ -154,21 +154,44 @@ canvas {
 }
 
 .light-0{
-  background-color: #FFFF99	;
+  background-color: #FFFF99;
 }
 
-.light-30{
-  background-color: 	#FFFF66;
+.light-250{
+  background-color: 	#FFFF75;
 }
 
-.light-50{
-  background-color: #FFFF33;
+.light-500{
+  background-color: #FFFF50;
 }
 
-.light-70{
+.light-750{
+  background-color: #FFFF25;
+}
+
+.light-1000{
   background-color: #FFFF00;
 }
 
+.air-pressure-0{
+  background-color: #d8f9ff;
+}
+
+.air-pressure-250{
+  background-color: 	#b1f2ff;
+}
+
+.air-pressure-500{
+  background-color: #8aecff;
+}
+
+.air-pressure-750{
+  background-color: #63e5ff;
+}
+
+.air-pressure-1000{
+  background-color: #3cdfff;
+}
 
 .led-on-1{
   background-color: #c2e207;
