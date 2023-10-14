@@ -10,7 +10,7 @@ document.querySelector('#login-btn').onclick = () => {
             data = JSON.parse(this.responseText);
             if (this.status == 200) {
                 localStorage.setItem('accessToken', data['accessToken']);
-                redirect('../index.html');
+                redirect('../home.html');
             }
             else if (this.status == 401) {
                 alert(data['message']);
