@@ -1,12 +1,12 @@
 function getLedStatus(ledNumber, ledStatus) {
     var ledBackground = document.querySelector("#led-background-" + ledNumber)
-    var ledResult = 'sáng'
+    var ledResult = 'Bật'
     var classes = 'o-vuong'
     if (ledStatus == 1) {
         classes += ' led-on-' + ledNumber
     }
     else if (ledStatus == 0) {
-        ledResult = 'tắt'
+        ledResult = 'Tắt'
         classes += ' led-off'
     }
 
