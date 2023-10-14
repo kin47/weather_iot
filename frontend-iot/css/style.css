@@ -170,23 +170,23 @@ canvas {
   background-color: #FFFF00;
 }
 
-.air-pressure-0 {
+.earth-moisture-0 {
   background-color: #d8f9ff;
 }
 
-.air-pressure-250 {
+.earth-moisture-25 {
   background-color: #b1f2ff;
 }
 
-.air-pressure-500 {
+.earth-moisture-50 {
   background-color: #8aecff;
 }
 
-.air-pressure-750 {
+.earth-moisture-75 {
   background-color: #63e5ff;
 }
 
-.air-pressure-1000 {
+.earth-moisture-100 {
   background-color: #3cdfff;
 }
 
@@ -196,7 +196,6 @@ canvas {
 
 .led-on-2 {
   background-color: #1d9ec5;
-  animation: rotation 0.5s infinite linear;
 }
 
 .led-on-3 {
