@@ -101,9 +101,9 @@ CORS_ALLOW_CREDENTIALS = True
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'weatheriot',
+        'NAME': 'iot',
         'USER': 'postgres',
-        'PASSWORD': '12345678',
+        'PASSWORD': 'mKdzvotoi47',
         'HOST': 'localhost',
         'PORT': '5432',
     }
