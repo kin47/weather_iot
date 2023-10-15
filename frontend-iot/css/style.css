@@ -41,6 +41,10 @@ p {
   text-align: center;
 }
 
+.sh20 {
+  height: 20px;
+}
+
 .no-flex {
   display: block !important;
 }
