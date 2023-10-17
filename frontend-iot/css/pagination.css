@@ -37,12 +37,12 @@
 .nutPaginate{
     padding: 0 20px;
     border-radius: 50px;
-    background-color: rgb(0, 200, 191);
+    background-color: #24c078;
 }
 
 .phanTrang li.active {
     color: #fff;
-    background-color: rgb(0, 200, 191);
+    background-color: #24c078;
 }
 
 .soTrang {
