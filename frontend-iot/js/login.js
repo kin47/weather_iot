@@ -22,12 +22,14 @@ document.querySelector('#login-btn').onclick = () => {
 document.querySelector('#register-btn').onclick = () => {
     const email = document.querySelector('#register-email').value;
     const username = document.querySelector('#register-username').value;
+    const phone = document.querySelector('#register-phone').value;
     const password = document.querySelector('#register-password').value;
     const confirmPassword = document.querySelector('#register-confirm-password').value;
     data = JSON.stringify({
         'email': email,
         'username': username,
         'password': password,
+        'phone': phone,
         'confirm-password': confirmPassword
     });
 
@@ -36,7 +38,7 @@ document.querySelector('#register-btn').onclick = () => {
             data = JSON.parse(this.responseText);
             if (this.status == 201) {
                 localStorage.setItem('accessToken', data['accessToken']);
-                redirect('../index.html');
+                redirect('../home.html');
             }
             else if (this.status == 400) {
                 alert(data['message']);
