@@ -93,7 +93,7 @@ class Register(BaseView):
     def post(self, request: HttpRequest):
         registerDTO: dict = json.loads(request.body)
         regexEmail = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
-        regexPassword = r'^(?=.*[A-Z])(?=.*[a-z])(?=.*[@#$%^&+=])(?=.*[0-9]).{8,}$'
+        regexPassword = r'^(?=.*[A-Z])(?=.*[a-z])(?=.*[@#$%^&+=!])(?=.*[0-9]).{8,}$'
         if valid(regexEmail, registerDTO.get('email')) == False:
             res = json.dumps({
                 "statusCode": 400,
@@ -111,7 +111,7 @@ class Register(BaseView):
         if registerDTO.get('password') != registerDTO.get('confirm-password'):
             res = json.dumps({
                 "statusCode": 400,
-                "message": "Wrong Confirm Password Format!"
+                "message": "Confirm password doesn't match the password!"
             })
             return HttpResponse(res, content_type='application/json', status=400)
         
@@ -127,6 +127,7 @@ class Register(BaseView):
             email=registerDTO.get('email'),
             password=Bcrypt.hashpw(registerDTO.get('password')),
             username=registerDTO.get('username'),
+            phone=registerDTO.get('phone'),
             is_admin=False
         )
         user.save()
@@ -134,6 +135,7 @@ class Register(BaseView):
         payload = {
             "sub": user.id,
             "email": user.email,
+            "phone": user.phone,
             "username": user.username,
             "iat": round(datetime.now().timestamp()),
             "admin": user.is_admin
@@ -155,7 +157,7 @@ class Login(BaseView):
                 if len(user_session) > 0:
                     res = json.dumps({
                         "statusCode": 401,
-                        "message": "Account is being logged in elsewhere"
+                        "message": "Account is being logged somewhere else"
                     })
                     return HttpResponse(res, content_type='application/json', status=401)
                 
@@ -174,7 +176,7 @@ class Login(BaseView):
                 res = json.dumps({ "statusCode": 401, "message": 'Password is incorrect' })
                 return HttpResponse(content=res, content_type='application/json', status=401)
         else:
-            res = json.dumps({ "statusCode": 401, "message": 'Email is not exsist' })
+            res = json.dumps({ "statusCode": 401, "message": 'Email is not exist' })
             return HttpResponse(content=res, content_type='application/json', status=401)
 
 
@@ -197,7 +199,9 @@ class Me(BaseView):
         
         user_response = {
             "username": user.username,
-            "email": user.email
+            "email": user.email,
+            "isAdmin": user.is_admin,
+            "phone": user.phone
         }
         return HttpResponse(json.dumps(user_response), content_type='application/json', status=200)
 
