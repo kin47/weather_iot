@@ -111,3 +111,15 @@ body {
 .profile-tab p {
     font-weight: 600;
 }
+
+.change-password-zone {
+    background-color: white; 
+    padding: 3%;
+}
+
+.password,
+.password:focus {
+    width: 40%;
+    border: 1px solid black;
+    padding: 5px 12px;
+}
