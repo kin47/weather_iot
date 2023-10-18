@@ -30,12 +30,12 @@ function drawGraph() {
                         yAxisID: 'y2'
                     },
                     {
-                        label: "Áp suất (hPa)",
+                        label: "Độ ẩm đất (%)",
                         data: airPressures,
                         borderColor: "#3cdfff",
                         backgroundColor: "#3cdfff",
                         tension: 0.4,
-                        yAxisID: 'y2'
+                        yAxisID: 'y1'
                     }
                 ]
         },
