@@ -6,7 +6,9 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<title>N17-IoT | Dashboard</title>
-	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="../css/style.css">
+	<link rel="stylesheet" href="../css/switch.css">
+	<link rel="stylesheet" href="../css/home.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 	<link rel="icon" type="image/x-icon" href="../../assets/img/tree.ico">
 </head>
@@ -15,6 +17,8 @@
 	<div class="container-scroller">
 		<!-- partial:partials/_navbar.html -->
 		<!-- partial -->
+
+
 		<nav class="navbar-breadcrumb col-xl-12 col-12 d-flex flex-row p-0">
 			<div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
 				<ul class="navbar-nav mr-lg-2">
@@ -31,6 +35,8 @@
 				</ul>
 			</div>
 		</nav>
+		
+		
 		<div class="container-fluid page-body-wrapper">
 			<nav class="sidebar sidebar-offcanvas" id="sidebar">
 				<ul class="nav">
@@ -73,7 +79,7 @@
 										<div class="temperature">
 											<p class="temperature-label">Nhiệt độ:</p>
 											<p id="temperature-result">loading</p>
-											<img class="height-50 float-right" src="/assets/img/celsius.png" alt="">
+											<img class="height-50 float-right" src="../assets/img/celsius.png" alt="">
 										</div>
 									</div>
 								</div>
@@ -85,7 +91,7 @@
 										<div class="humidity">
 											<p class="humidity-label">Độ ẩm không khí:</p>
 											<p id="humidity-result">loading</p>
-											<img class="height-50 float-right" src="/assets/img/humidity.png">
+											<img class="height-50 float-right" src="../assets/img/humidity.png">
 										</div>
 									</div>
 								</div>
@@ -97,7 +103,7 @@
 										<div class="light">
 											<p class="light-label">Ánh sáng: </p>
 											<p id="light-result">loading</p>
-											<img class="height-50 float-right" src="/assets/img/light.png">
+											<img class="height-50 float-right" src="../assets/img/light.png">
 										</div>
 									</div>
 								</div>
@@ -109,7 +115,7 @@
 										<div class="earth-moisture">
 											<p class="earth-moisture-label">Độ ẩm đất: </p>
 											<p id="earth-moisture-result">loading</p>
-											<img class="height-50 float-right" src="/assets/img/earth_moisture.png">
+											<img class="height-50 float-right" src="../assets/img/earth_moisture.png">
 										</div>
 									</div>
 								</div>
@@ -139,7 +145,16 @@
 								<p style="margin-top: 50px;">Đèn:</p>
 								<p id="led-result-1">Tắt</p>
 								<div class="o-vuong" id="led-background-1" onclick="led_on_off(1)">
-									<img src="/assets/img/led.png" class="with-100" alt="">
+									<img src="../assets/img/led.png" class="with-100" alt="">
+								</div>
+								<div class="height-50pt text-center position-relative">
+									<p style="margin-top: 50px;">Chế độ tự động:</p>
+									<label class="switch">
+										<p style="margin-top: 10px;"></p>
+										<p style="margin-left: 10px;"></p>
+										<input type="checkbox" id="toggleButton">
+										<span class="slider"></span>
+									  </label>
 								</div>
 							</div>
 							<div style="border-bottom: 1px solid black;"></div>
@@ -147,7 +162,7 @@
 								<p style="margin-top: 50px;">Máy bơm:</p>
 								<p id="led-result-2">Tắt</p>
 								<div class="o-vuong" id="led-background-2" onclick="led_on_off(2)">
-									<img src="/assets/img/water_pump.png" class="with-100" alt="">
+									<img src="../assets/img/water_pump.png" class="with-100" alt="">
 								</div>
 							</div>
 						</div>
@@ -157,10 +172,14 @@
 			</div>
 		</div>
 	</div>
+
+
+
 	<script src="/js/utils.js" defer async></script>
 	<script src="/js/home.js" defer async></script>
 	<script src="/js/menu.js" defer async></script>
 	<script src="/js/chart.min.js"></script>
+	<script src="/js/switch.js"></script>
 	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 	<script src="/js/led.js"></script>
 	<script src="/js/humidity.js"></script>
