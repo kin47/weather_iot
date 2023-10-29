@@ -27,6 +27,7 @@
     margin: 0 3px;
     line-height: 45px;
     border-radius: 50%;
+    font-weight: 600;
 }
 
 .phanTrang ul li.dots{
@@ -49,4 +50,8 @@
     display: flex;
     flex-direction: row;
     margin: 0 10px;
+}
+
+.phanTrang li.inactive:hover {
+    background-color: rgb(217, 216, 216);
 }

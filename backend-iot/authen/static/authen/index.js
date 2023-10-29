@@ -1,5 +1,5 @@
 // Tạo kết nối WebSocket
-const socket = new WebSocket(`ws://${document.domain}:${location.port}/stream-video`);
+const socket = new WebSocket(`ws://${document.domain}:${location.port}/recognize-face`);
 
 // Bắt sự kiện kết nối thành công
 socket.addEventListener("open", async (event) => {
@@ -42,6 +42,7 @@ async function initCamera() {
             console.log(err);
         });
     }
+    else console.log('camera not availability');
 }
 
 function stopCamera() {
@@ -52,7 +53,7 @@ function stopCamera() {
         });
         window.cameraStream = null;
         video.srcObject = null;
-        socket.close();
+        // socket.close();
     }
 }
 
@@ -70,4 +71,5 @@ async function sendToServer() {
     stopCamera();
 }
 
+document.querySelector('#start-stream').onclick = sendToServer;
 document.querySelector('#stop-stream').onclick = stopCamera;
