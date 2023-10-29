@@ -12,7 +12,7 @@ def getImagesAndLabels(path):
     
     for imagePath in imagePaths:
         PIL_img = Image.open(imagePath).convert('L') # convert it to grayscale
-        img_numpy = np.array(PIL_img, 'unit8')
+        img_numpy = np.array(PIL_img, 'uint8')
         
         id = int(os.path.split(imagePath)[-1].split('_')[1])
         faces = detector.detectMultiScale(img_numpy)
@@ -28,4 +28,7 @@ def trainingFaceId(path):
     recognizer = cv2.face.LBPHFaceRecognizer.create()
     faces, ids = getImagesAndLabels(path)
     recognizer.train(faces, np.array(ids))
-    recognizer.write(os.path.join('training.yaml'))
+    recognizer.write(os.path.join('authen', 'training', 'user_1.yaml'))
+
+print(os.path.join('authen', 'img_user', 'user_1'))
+trainingFaceId(os.path.join('authen', 'img_user', 'user_1'))

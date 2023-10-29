@@ -25,7 +25,15 @@ SECRET_KEY = 'lu^3g6hp3mzg1+w%e97oi8vzwz6d_bfn3pp1m#im7byji@8xp)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '192.168.1.109',
+    '192.168.0.104',
+    '192.168.0.105',
+    '192.168.1.5',
+    '172.20.10.2',
+]
 
 
 # Application definition
@@ -38,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'channels',
+    'esp32.apps.Esp32Config',
     'authen.apps.AuthenConfig',
     'corsheaders'
 ]
@@ -95,15 +104,25 @@ CORS_ALLOWED_ORIGINS = [
 # CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
+# Time zone config
+USE_TZ = False
+
+# Pagination config
+Pagination = {
+    "CURRENT_PAGE": 1,
+    "ITEM_IN_PAGE": 10,
+    "PAGES_IN_WEBVIEW": 5
+}
+
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'iot',
+        'NAME': 'weatheriot',
         'USER': 'postgres',
-        'PASSWORD': 'mKdzvotoi47',
+        'PASSWORD': '12345678',
         'HOST': 'localhost',
         'PORT': '5432',
     }

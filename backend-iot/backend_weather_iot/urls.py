@@ -19,4 +19,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/authen/', include('authen.urls')),
+    path('api/esp32/', include('esp32.urls'))
 ]
