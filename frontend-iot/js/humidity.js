@@ -3,8 +3,8 @@ async function getHumidity() {
     humidities.shift()
     humidities.push(newHumidity)
 
-    var humidityResult = document.querySelector("#humidity-result")
-    humidityResult.innerHTML = newHumidity + "%"
+    // var humidityResult = document.querySelector("#humidity-result")
+    // humidityResult.innerHTML = newHumidity + "%"
 
     //Thay đổi background
     var humidityBackground = document.querySelector("#humidity-background")

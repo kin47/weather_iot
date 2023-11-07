@@ -3,8 +3,8 @@ async function getLightStatus() {
     lights.shift()
     lights.push(newLight)
 
-    var lightResult = document.querySelector("#light-result")
-    lightResult.innerHTML = newLight + " lx"
+    // var lightResult = document.querySelector("#light-result")
+    // lightResult.innerHTML = newLight + " lx"
 
     var classess = "stretch-card width-24 "
     var lightBackground = document.querySelector("#light-background")
