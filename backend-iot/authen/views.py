@@ -235,3 +235,58 @@ class RefreshToken(BaseView):
         UserSession.objects.update(access_token=access_token, id_user=user)
         res = json.dumps({ "accessToken": access_token })
         return HttpResponse(content=res, content_type='application/json', status=200)
+
+
+class ChangePassWord(BaseView):
+    def post(self, request: HttpRequest):
+        accessToken = request.headers['Authorization'].split(' ')[1]
+        if jwt.valid_token(access_token=accessToken) == False:
+            res = json.dumps({
+                "statusCode": 401,
+                "message": "Unauthorized"
+            })
+            return HttpResponse(res, content_type='application/json', status=401)
+        
+        user: User = getUserFromToken(accessToken=accessToken)
+        if user == None:
+            res = json.dumps({
+                "statusCode": 401,
+                "message": "Unauthorized"
+            })
+            return HttpResponse(res, content_type='application/json', status=401)
+        
+        dto: dict = json.loads(request.body)
+        current_password = dto.get('currentPassword') if dto.get('currentPassword') != None else ''
+        new_password = dto.get('newPassword') if dto.get('newPassword') != None else ''
+        confirm_password = dto.get('confirmPassword') if dto.get('confirmPassword') != None else ''
+        regexPassword = r'^(?=.*[A-Z])(?=.*[a-z])(?=.*[@#$%^&+=!])(?=.*[0-9]).{8,}$'
+
+        if Bcrypt.checkpw(current_password, user.password) == False:
+            res = json.dumps({
+                "statusCode": 400,
+                "message": "Current password incorrect"
+            })
+            return HttpResponse(res, content_type='application/json', status=400)
+        
+        if valid(regexPassword, new_password) == False:
+            res = json.dumps({
+                "statusCode": 400,
+                "message": "Wrong Password Format!"
+            })
+            return HttpResponse(res, content_type='application/json', status=400)
+        
+        if new_password != confirm_password:
+            res = json.dumps({
+                "statusCode": 400,
+                "message": "Confirm password incorrect"
+            })
+            return HttpResponse(res, content_type='application/json', status=400)
+        
+        user.password = Bcrypt.hashpw(new_password)
+        user.save()
+        
+        res = json.dumps({
+            "statusCode": 201,
+            "message": "Change password successfully"
+        })
+        return HttpResponse(res, content_type='application/json', status=201)

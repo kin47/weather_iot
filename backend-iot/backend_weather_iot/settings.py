@@ -33,6 +33,7 @@ ALLOWED_HOSTS = [
     '192.168.0.105',
     '192.168.1.5',
     '172.20.10.2',
+    '192.168.1.20',
 ]
 
 
@@ -129,7 +130,7 @@ DATABASES = {
 }
 
 # jwt config
-JWT_EXPIRES = 3600
+JWT_EXPIRES = 24 * 3600
 
 JWT_HEADER = {
     "alg": "HS256",
