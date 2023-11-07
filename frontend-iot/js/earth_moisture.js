@@ -3,8 +3,8 @@ async function getAirPressureStatus() {
     airPressures.shift()
     airPressures.push(newAirPressure)
 
-    var airPressureResult = document.querySelector("#earth-moisture-result")
-    airPressureResult.innerHTML = newAirPressure + " %"
+    // var airPressureResult = document.querySelector("#earth-moisture-result")
+    // airPressureResult.innerHTML = newAirPressure + " %"
 
     var classess = "stretch-card width-24 "
     var airPressureBackground = document.querySelector("#earth-moisture-background")

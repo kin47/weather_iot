@@ -35,11 +35,38 @@ callAPI('api/authen/me', 'GET', null, function () {
             }
         }
         else if (this.status == 401) {
-            redirect('./error/401_unauthorized.html');
+            unauthorizedPage();
         }
     }
 });
 
 function formatPhoneNumber(phone) {
     return phone.replace(/(\d{3})(\d{3})(\d{4})/, '$1 $2 $3');
+}
+
+document.querySelector('#btn-change-pasword').onclick = () => {
+    const currentPassword = document.querySelector('#current-password').value;
+    const newPassword = document.querySelector('#new-password').value;
+    const confirmPassword = document.querySelector('#confirm-password').value;
+
+    const data = JSON.stringify({
+        "currentPassword": currentPassword,
+        "newPassword": newPassword,
+        "confirmPassword": confirmPassword,
+    });
+
+    callAPI('api/authen/change-password', 'POST', data, function () {
+        if (this.readyState === 4) {
+            response = JSON.parse(this.responseText);
+            if (this.status == 201) {
+                alert(response['message']);
+            }
+            else if (this.status == 400) {
+                alert(response['message']);
+            }
+            else if (this.status == 401) {
+                unauthorizedPage();
+            }
+        }
+    });
 }

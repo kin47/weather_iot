@@ -1,5 +1,6 @@
-port = 8000;
-prefixUrl = `http://${document.domain}:${port}/`;
+const port = 8000;
+const domain = '192.168.1.20';
+prefixUrl = `http://${domain}:${port}/`;
 
 function redirect(url) {
     console.log(url);
@@ -30,4 +31,13 @@ function unauthorizedPage() {
 
 function badGetWay() {
     redirect(`http://${document.domain}:${location.port}/N17-IoT/error/502_badgetway.html`);
+}
+
+const wsURLPrefix = `ws://${domain}:${port}/`;
+function connectWebsocket(url, onopenHandler, onmessageHandler, oncloseHandler, onerrorHandler) {
+    const socket = new WebSocket(`${wsURLPrefix}${url}`);
+    socket.onopen = onopenHandler;
+    socket.onmessage = onmessageHandler;
+    socket.onclose = oncloseHandler;
+    socket.onerror = onerrorHandler;
 }

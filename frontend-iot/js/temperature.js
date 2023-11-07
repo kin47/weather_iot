@@ -3,8 +3,8 @@ async function getTemperature() {
     temperatures.shift()
     temperatures.push(newTemperature)
 
-    var temeratureResult = document.querySelector("#temperature-result")
-    temeratureResult.innerHTML = newTemperature + "°C"
+    // var temeratureResult = document.querySelector("#temperature-result")
+    // temeratureResult.innerHTML = newTemperature + "°C"
 
     //chỉnh màu nền cho ô này tùy theo nhiệt độ
     var temperatureBackground = document.querySelector("#temperatureBackground")
