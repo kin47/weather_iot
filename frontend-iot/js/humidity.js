@@ -1,5 +1,5 @@
-async function getHumidity() {
-    var newHumidity = Math.floor(Math.random() * 100) + 1;
+async function getHumidity(newHumidity) {
+    // var newHumidity = Math.floor(Math.random() * 100) + 1;
     humidities.shift()
     humidities.push(newHumidity)
 

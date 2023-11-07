@@ -2,7 +2,7 @@ callAPI('api/authen/me', 'GET', null, function() {
     if (this.readyState === 4) {
         data = JSON.parse(this.responseText);
         if (this.status == 401) {
-            redirect('./error/401_unauthorized.html');
+            unauthorizedPage();
         }
     }
 });
@@ -30,6 +30,7 @@ const onmessageHandler = (event) => {
             dataShows[index].innerText = data[key];
         }
     });
+    main(data['temperature'], data['humidity'], data['lightValue'], data['earthMoisture']);
 }
 
 const oncloseHandler = (event) => {

@@ -1,5 +1,5 @@
 const port = 8000;
-const domain = '192.168.1.20';
+const domain = '192.168.1.109';
 prefixUrl = `http://${domain}:${port}/`;
 
 function redirect(url) {
