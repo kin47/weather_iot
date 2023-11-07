@@ -26,14 +26,7 @@ SECRET_KEY = 'lu^3g6hp3mzg1+w%e97oi8vzwz6d_bfn3pp1m#im7byji@8xp)'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-    '192.168.1.109',
-    '192.168.0.104',
-    '192.168.0.105',
-    '192.168.1.5',
-    '172.20.10.2',
-    '192.168.1.20',
+    '*',
 ]
 
 
@@ -96,13 +89,13 @@ ASGI_APPLICATION = 'backend_weather_iot.asgi.application'
 # CSRF_COOKIE_SAMESITE = None
 
 # CORS setting
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5501",
-    "http://localhost:5500",
-    "http://127.0.0.1:5501",
-    "http://127.0.0.1:5500"
-]
-# CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:5501",
+#     "http://localhost:5500",
+#     "http://127.0.0.1:5501",
+#     "http://127.0.0.1:5500"
+# ]
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
 # Time zone config
