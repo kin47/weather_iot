@@ -74,7 +74,9 @@
                         <div class="row-flexbox pl-5">
                             <div class="column-flexbox">
                                 <label for="input-file" id="drop-area">
-                                    <input type="file" id="input-file" accept="image/*" style="display: none;">
+                                    <form id="image-upload-form" style="display: none;">
+                                        <input type="file" id="input-file" accept="image/*">
+                                    </form>
                                     <div class="column-flexbox">
                                         <div class="upload-file ajax-upload-dragdrop column-flexbox">
                                             <img src="/assets/img/upload_image.png" class="upload-file-icon">
@@ -90,6 +92,17 @@
                                 <div class="sh20"></div>
                                 <button type="button" id="detect-disease-btn" class="display-none">Nhận diện bệnh</button>
                             </div>
+                            <div class="sw50"></div>
+                            <div class="column-flexbox">
+                                <div class="display-none label" id="label-tree-detect">Dự đoán cây:</div>
+                                <div class="display-none" id="tree-detect"></div>
+                                <div class="sh50"></div>
+                                <div class="label display-none" id="label-disease-detect">Dự đoán bệnh:</div>
+                                <div class="display-none" id="disease-detect"></div>
+                                <div class="sh50"></div>
+                                <div class="label display-none" id="label-treatment">Cách chữa bệnh:</div>
+                                <div class="display-none" id="treatment"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -100,6 +113,6 @@
 </body>
 <script src="/js/utils.js" defer async></script>
 <script src="/js/menu.js" defer async></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="/js/disease_detection.js" defer async></script>
-
 </html>
