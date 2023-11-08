@@ -49,6 +49,10 @@ p {
   height: 50px;
 }
 
+.sw50 {
+  width: 50px;
+}
+
 .no-flex {
   display: block !important;
 }

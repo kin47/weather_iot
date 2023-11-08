@@ -1,10 +1,6 @@
 async function getAirPressureStatus(newAirPressure) {
-    // var newAirPressure = Math.floor(Math.random() * 100) + 1;
     airPressures.shift()
     airPressures.push(newAirPressure)
-
-    // var airPressureResult = document.querySelector("#earth-moisture-result")
-    // airPressureResult.innerHTML = newAirPressure + " %"
 
     var classess = "stretch-card width-24 "
     var airPressureBackground = document.querySelector("#earth-moisture-background")
