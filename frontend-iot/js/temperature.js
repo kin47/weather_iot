@@ -1,5 +1,5 @@
-async function getTemperature() {
-    var newTemperature = Math.floor(Math.random() * 100);
+async function getTemperature(newTemperature) {
+    // var newTemperature = Math.floor(Math.random() * 100);
     temperatures.shift()
     temperatures.push(newTemperature)
 

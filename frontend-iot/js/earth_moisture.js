@@ -1,5 +1,5 @@
-async function getAirPressureStatus() {
-    var newAirPressure = Math.floor(Math.random() * 100) + 1;
+async function getAirPressureStatus(newAirPressure) {
+    // var newAirPressure = Math.floor(Math.random() * 100) + 1;
     airPressures.shift()
     airPressures.push(newAirPressure)
 

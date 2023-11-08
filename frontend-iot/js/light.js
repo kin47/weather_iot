@@ -1,5 +1,5 @@
-async function getLightStatus() {
-    var newLight = Math.floor(Math.random() * 1000) + 1;
+async function getLightStatus(newLight) {
+    // var newLight = Math.floor(Math.random() * 1000) + 1;
     lights.shift()
     lights.push(newLight)
 

@@ -9,12 +9,12 @@ var labels = ['', '', '', '', '', '', '']
 var myChart2;
 drawGraph();
 
-async function main() {
-    setInterval(async () => {
-        await getTemperature()
-        await getHumidity()
-        await getLightStatus()
-        await getAirPressureStatus()
+async function main(temperature, humidity, lightStatus, airPressureStatus) {
+    // setInterval(async () => {
+        await getTemperature(temperature)
+        await getHumidity(humidity)
+        await getLightStatus(lightStatus)
+        await getAirPressureStatus(airPressureStatus)
 
         var today = new Date();
         var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
@@ -22,9 +22,9 @@ async function main() {
         labels.push(time)
 
         myChart2.update()
-    }, 2000);
+    // }, 2000);
 }
-main()
+// main()
 
 async function fetchData(url) {
     const response = await fetch(url)
