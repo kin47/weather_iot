@@ -10,12 +10,16 @@ const piwv = 5;
 const iip = 10;
 
 function renderTable(response, currentPage) {
+    const data = response['dataOfPage'];
+    if (data.length == 0) {
+        document.querySelector('#esp32-info-panel span').innerText = 'Không tìm thấy dữ liệu';
+        return;
+    }
     const panelNoData = document.querySelector('#panel-no-data');
     const phanTrang = document.querySelector('.phanTrang');
     const btnPaginations = document.querySelector('.phanTrang ul');
     const tbody = document.querySelector('tbody');
     let htmlTable = '';
-    const data = response['dataOfPage'];
     for (item of data) {
         htmlTable = htmlTable + `
             <tr>

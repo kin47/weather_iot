@@ -15,7 +15,7 @@ function getLedStatus(ledNumber, ledStatus) {
 }
 
 async function led_on_off(ledNumber) {
-    console.log(ledNumber)
+    // console.log(ledNumber)
     const data = {}
     if (ledNumber == 1) {
         if (ledStatus[0] == 1) {
@@ -41,8 +41,6 @@ async function led_on_off(ledNumber) {
 }
 
 async function sendLedControl(ledNumber, data) {
-
-    {
-        getLedStatus(ledNumber, ledStatus[ledNumber - 1])
-    }
+    console.log(ledNumber, ledStatus[ledNumber - 1])
+    getLedStatus(ledNumber, ledStatus[ledNumber - 1])
 }

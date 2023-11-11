@@ -34,8 +34,9 @@ function badGetWay() {
 }
 
 const wsURLPrefix = `ws://${domain}:${port}/`;
+let socket = null;
 function connectWebsocket(url, onopenHandler, onmessageHandler, oncloseHandler, onerrorHandler) {
-    const socket = new WebSocket(`${wsURLPrefix}${url}`);
+    socket = new WebSocket(`${wsURLPrefix}${url}`);
     socket.onopen = onopenHandler;
     socket.onmessage = onmessageHandler;
     socket.onclose = oncloseHandler;
