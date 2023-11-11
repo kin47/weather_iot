@@ -1,10 +1,6 @@
 async function getLightStatus(newLight) {
-    // var newLight = Math.floor(Math.random() * 1000) + 1;
     lights.shift()
     lights.push(newLight)
-
-    // var lightResult = document.querySelector("#light-result")
-    // lightResult.innerHTML = newLight + " lx"
 
     var classess = "stretch-card width-24 "
     var lightBackground = document.querySelector("#light-background")

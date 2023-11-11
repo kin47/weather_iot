@@ -7,7 +7,7 @@ callAPI('api/authen/me', 'GET', '', function() {
 });
 
 const piwv = 5;
-const iip = 10;
+const iip = 20;
 
 function renderTable(response, currentPage) {
     const data = response['dataOfPage'];

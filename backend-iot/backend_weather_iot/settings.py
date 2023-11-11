@@ -26,7 +26,7 @@ SECRET_KEY = 'lu^3g6hp3mzg1+w%e97oi8vzwz6d_bfn3pp1m#im7byji@8xp)'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '*',
+    '*'
 ]
 
 
@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'channels',
     'esp32.apps.Esp32Config',
     'authen.apps.AuthenConfig',
-    'corsheaders'
+    'corsheaders',
+    'disease_detection.apps.DiseaseDetectionConfig'
 ]
 
 MIDDLEWARE = [
@@ -118,9 +119,9 @@ Pagination = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'weatheriot',
+        'NAME': 'iot',
         'USER': 'postgres',
-        'PASSWORD': '12345678',
+        'PASSWORD': 'mKdzvotoi47',
         'HOST': 'localhost',
         'PORT': '5432',
     }

@@ -1,10 +1,6 @@
 async function getTemperature(newTemperature) {
-    // var newTemperature = Math.floor(Math.random() * 100);
     temperatures.shift()
     temperatures.push(newTemperature)
-
-    // var temeratureResult = document.querySelector("#temperature-result")
-    // temeratureResult.innerHTML = newTemperature + "°C"
 
     //chỉnh màu nền cho ô này tùy theo nhiệt độ
     var temperatureBackground = document.querySelector("#temperatureBackground")
