@@ -1,14 +1,19 @@
-callAPI('api/authen/me', 'GET', null, function() {
-    if (this.readyState === 4) {
-        data = JSON.parse(this.responseText);
-        if (this.status == 401) {
-            unauthorizedPage();
-        }
-    }
-});
+// callAPI('api/authen/me', 'GET', null, function() {
+//     if (this.readyState === 4) {
+//         data = JSON.parse(this.responseText);
+//         if (this.status == 401) {
+//             unauthorizedPage();
+//         }
+//     }
+// });
 
 const onopenHandler = (event) => {
     console.log('Connected to server ...');
+    socket.send(JSON.stringify({
+        "from": "user",
+        "token": localStorage.getItem('accessToken') ? localStorage.getItem('accessToken') : 'abcxyz',
+        "first": 1
+    }));
 }
 
 const onerrorHandler = (event) => {
@@ -17,6 +22,7 @@ const onerrorHandler = (event) => {
 
 const onmessageHandler = (event) => {
     const data = JSON.parse(event.data);
+    // console.log(data);
     const dataShows = [
         null,
         document.querySelector('#temperature-result span'),
@@ -26,7 +32,7 @@ const onmessageHandler = (event) => {
     ];
 
     Object.keys(data).forEach((key, index) => {
-        if (key != 'authen') {
+        if (key != 'from') {
             dataShows[index].innerText = data[key];
         }
     });

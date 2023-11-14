@@ -25,6 +25,22 @@ async function callAPI(url, method,  data=null, handler) {
     xhr.send(data);
 }
 
+async function callAPIDowload(url, method,  data=null, handler) {
+    apiUrl = `${prefixUrl}${url}`;
+    accessToken = localStorage.getItem('accessToken') ? localStorage.getItem('accessToken') : 'abcxyz';
+
+    const xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+
+    xhr.addEventListener("load", handler);
+
+    xhr.open(method, apiUrl, true);
+    xhr.responseType = 'blob';
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.setRequestHeader("Authorization", `Bearer ${accessToken}`);
+    xhr.send(data);
+}
+
 function unauthorizedPage() {
     redirect(`http://${document.domain}:${location.port}/N17-IoT/error/401_unauthorized.html`);
 }
@@ -34,8 +50,9 @@ function badGetWay() {
 }
 
 const wsURLPrefix = `ws://${domain}:${port}/`;
+let socket = null;
 function connectWebsocket(url, onopenHandler, onmessageHandler, oncloseHandler, onerrorHandler) {
-    const socket = new WebSocket(`${wsURLPrefix}${url}`);
+    socket = new WebSocket(`${wsURLPrefix}${url}`);
     socket.onopen = onopenHandler;
     socket.onmessage = onmessageHandler;
     socket.onclose = oncloseHandler;

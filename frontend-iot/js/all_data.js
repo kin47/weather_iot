@@ -10,12 +10,16 @@ const piwv = 5;
 const iip = 20;
 
 function renderTable(response, currentPage) {
+    const data = response['dataOfPage'];
+    if (data.length == 0) {
+        document.querySelector('#esp32-info-panel span').innerText = 'Không tìm thấy dữ liệu';
+        return;
+    }
     const panelNoData = document.querySelector('#panel-no-data');
     const phanTrang = document.querySelector('.phanTrang');
     const btnPaginations = document.querySelector('.phanTrang ul');
     const tbody = document.querySelector('tbody');
     let htmlTable = '';
-    const data = response['dataOfPage'];
     for (item of data) {
         htmlTable = htmlTable + `
             <tr>
@@ -126,6 +130,47 @@ document.querySelector('#btn-loc-du-lieu').onclick = () => {
             else if (this.status == 401) {
                 unauthorizedPage();
             }
+        }
+    });
+}
+
+document.querySelector('#btn-export-excel').onclick = () => {
+    let url = `api/esp32/data/export-excel`;
+    const startDate = document.querySelector('#start-date').value;
+    const endDate = document.querySelector('#end-date').value;
+
+    if (startDate && endDate) {
+        url = url + `?startDate=${startDate}&endDate=${endDate}`;
+    }
+
+    callAPIDowload(url, 'GET', '', function() {
+        if (this.status === 200) {
+            // Kiểm tra xem trình duyệt có hỗ trợ createObjectURL không
+            if (window.URL && window.URL.createObjectURL) {
+                // Tạo đường dẫn tạm thời để tải tệp
+                var url = window.URL.createObjectURL(this.response);
+
+                // Tạo một thẻ 'a' để tải tệp
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = `esp32_data_${new Date().getTime()}.xlsx`;
+
+                // Thêm thẻ 'a' vào body và kích hoạt nó
+                document.body.appendChild(a);
+                a.click();
+
+                // Loại bỏ đường dẫn tạm thời và thẻ 'a'
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            } else {
+                console.log('Trình duyệt không hỗ trợ createObjectURL.');
+            }
+        }
+        else if (this.status == 400) {
+            alert(data['message']);
+        }
+        else if (this.status == 401) {
+            unauthorizedPage();
         }
     });
 }
