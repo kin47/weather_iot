@@ -40,26 +40,119 @@ class DiseaseDetection(BaseView):
 
         pred = np.argmax(result, axis=1)
         print(pred)
-        # if image:
-        #     image_bytes = image.read()
-
-            # Convert the image bytes to a numpy array
-            # nparr = np.frombuffer(image_bytes, np.uint8)
-            # image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-            # cv2.imshow('image', image)
-
-            # image = cv2.resize(image, (128, 128))
-            # image = (
-            #     img_to_array(image) / 255
-            # )  # convert image to np array and normalize
-            # image = np.expand_dims(image, axis=0)  # change dimention 3D to 4D
-
-            # # Make predictions
-            # result = model.predict(image)
-
-            # pred = np.argmax(result, axis=1)[0]
-            # print('@@ RAW Result', pred)
         if pred == 0:
+            res = json.dumps({
+                "tree": "Táo",
+                "disease": "Bệnh ghẻ trên cây táo (Apple Scab Disease)",
+                "treatment": "Giữ cho môi trường xung quanh cây trồng sạch sẽ bằng cách loại bỏ cỏ dại, mảnh vụn thực vật, các bộ phận của cây bị thiệt hại, phát triển của các loại cây không mong muốn và các thực vật xung quanh tự mọc và không được bảo vệ."
+            })
+            return HttpResponse(res, content_type='application/json', status=200)
+        elif pred == 1:
+            res = json.dumps({
+                "tree": "Táo",
+                "disease": "Bệnh thối đen (Apple Black Rot)",
+                "treatment": "Xử lý bệnh thối đen trên cây táo bắt đầu bằng công tác vệ sinh. Vì bào tử nấm mùa đông trên lá rụng, trái cây ướp xác, vỏ cây chết và vỏ hộp , nên điều quan trọng là phải dọn sạch tất cả các mảnh vụn rơi và trái cây chết và tránh xa cây."
+            })
+            return HttpResponse(res, content_type='application/json', status=200)
+        elif pred == 2:
+            res = json.dumps({
+                "tree": "Táo",
+                "disease": "Bệnh gỉ sắt táo (Cedar Apple Rust)",
+                "treatment": "Táo bị bệnh gỉ sắt táo cần được chăm sóc đặc biệt để khắc phục bệnh mà vẫn sinh quả. Đầu tiên, hãy kiểm tra xem bạn có loài cây bách xù nào gần cây táo của bạn không. Nếu chúng bị nhiễm bệnh, chúng sẽ tạo ra những vết thương vào mùa xuân và mùa hè có thể phát triển khá lớn. Chúng tạo ra những đường gân màu cam đặc biệt khó bỏ lỡ. Các bào tử từ chúng có thể lây nhiễm bất kỳ cây táo nào gần đó.\nMột cách để kiểm soát căn bệnh này là loại bỏ hoặc tiêu diệt bất kỳ cây bách nào gần đó. Hoặc bạn chỉ có thể theo dõi chúng để tìm kiếm và phá hủy cây hoặc cắt tỉa và phá hủy các nhánh bằng các lỗ hổng. Một cách khác để kiểm soát bệnh gỉ sắt táo là trồng các giống táo có khả năng chống nhiễm trùng: Red Delicious, McIntosh, Wineap, Empire, và các loại khác.\nMột bình xịt thuốc diệt nấm cũng có thể được sử dụng. Vườn ươm địa phương của bạn có thể giúp bạn tìm thấy bình xịt thích hợp. Tuy nhiên, phòng ngừa thường là một cách tốt hơn để kiểm soát bệnh này trên cây táo. Khoảng 1.000 feet giữa táo và các loài cây bách xù là đủ để bảo vệ cây của bạn. Ngoài ra, hãy nhớ rằng mức độ nhiễm trùng thấp sẽ không ảnh hưởng đến cây trồng của bạn rất nhiều."
+            })
+            return HttpResponse(res, content_type='application/json', status=200)
+        elif pred == 3:
+            res = json.dumps({
+                "tree": "Táo",
+                "disease": "Không có bệnh",
+                "treatment": "Không có bệnh"
+            })
+            return HttpResponse(res, content_type='application/json', status=200)
+        elif pred == 4:
+            res = json.dumps({
+                "tree": "Ảnh nền",
+                "disease": "Ảnh nền không chứa lá cây",
+                "treatment": "Hãy đảm bảo rằng bạn đã chụp đúng ảnh lá cây, và chụp cận cảnh 1 chiếc lá"
+            })
+            return HttpResponse(res, content_type='application/json', status=200)
+        elif pred == 5:
+            res = json.dumps({
+                "tree": "Ngô",
+                "disease": "Đốm lá Cercospora/Đốm lá xám (Cercospora Leaf Spot/Gray Leaf Spot)",
+                "treatment": "Để kiểm soát bệnh đốm lá ngô, có thể áp dụng các biện pháp như sử dụng giống ngô chống chịu bệnh, quản lý cân bằng độ ẩm trong vườn, tránh gieo cấy quá sát nhau, thực hiện xoá bỏ và tiêu hủy những phần cây bị nhiễm bệnh, và sử dụng thuốc trừ sâu hoặc thuốc bảo vệ thực vật phù hợp nếu cần thiết."
+            })
+            return HttpResponse(res, content_type='application/json', status=200)
+        elif pred == 6:
+            res = json.dumps({
+                "tree": "Ngô",
+                "disease": "Bệnh gỉ sắt thường gặp trên ngô (Common Rust)",
+                "treatment": "Biện pháp quản lý tốt nhất là sử dụng các giống ngô lai kháng bệnh. Thuốc diệt nấm cũng có thể có lợi, đặc biệt nếu áp dụng sớm khi đã xuất hiện ít mụn mủ trên lá."
+            })
+            return HttpResponse(res, content_type='application/json', status=200)
+        elif pred == 8:
+            res = json.dumps({
+                "tree": "Ngô",
+                "disease": "Không có bệnh",
+                "treatment": "Không có bệnh"
+            })
+            return HttpResponse(res, content_type='application/json', status=200)
+        elif pred == 7:
+            res = json.dumps({
+                "tree": "Ngô",
+                "disease": "Bệnh bạc lá nghệ trên ngô (Northern Leaf Blight)",
+                "treatment": "Sử dụng giống lai kháng bệnh. Thuốc diệt nấm có thể được sử dụng trên các giống cận huyết để sản xuất hạt giống trong giai đoạn đầu của bệnh này. Các biện pháp luân canh và làm đất có thể hữu ích trong một số trường hợp."
+            })
+            return HttpResponse(res, content_type='application/json', status=200)
+        elif pred == 9:
+            res = json.dumps({
+                "tree": "Nho",
+                "disease": "Bệnh thối đen (Grape Black Rot)",
+                "treatment": "Những cành cắt tỉa và quả ướp xác bị nhiễm bệnh phải được loại bỏ, đốt và/hoặc chôn trong đất trước khi cây mới bắt đầu phát triển vào mùa xuân. Ở những vườn nho có các giống mẫn cảm hoặc nơi bệnh thối đen đã xảy ra vào năm trước, nên phun thuốc diệt nấm vào đầu mùa để ngăn ngừa nhiễm trùng sớm nhất. Nếu nhiễm trùng trở nên nhiều, việc bảo vệ chống thối quả là rất khó khăn vào cuối mùa sinh trưởng. Khuyến khích trồng các giống kháng bệnh."
+            })
+            return HttpResponse(res, content_type='application/json', status=200)
+        elif pred == 10:
+            res = json.dumps({
+                "tree": "Nho",
+                "disease": "Sởi đen (Esca/Black Measles)",
+                "treatment": "Hiện nay, chưa có chiến lược quản lý hiệu quả bệnh sởi. Những người trồng nho làm rượu vang với những vườn nho nhỏ thường yêu cầu nhân viên hiện trường loại bỏ những quả bị nhiễm bệnh trước khi thu hoạch. Nho khô bị bệnh sởi sẽ bị loại bỏ trong quá trình thu hoạch hoặc tại nhà đóng gói, trong khi người trồng nho sẽ để lại quả bị bệnh trên cây nho. Nghiên cứu hiện tại tập trung vào việc bảo vệ các vết cắt tỉa khỏi bị nhiễm nấm để giảm thiểu nấm nghi ngờ xâm nhập vào vết thương mới."
+            })
+            return HttpResponse(res, content_type='application/json', status=200)
+        elif pred == 12:
+            res = json.dumps({
+                "tree": "Nho",
+                "disease": "Không có bệnh",
+                "treatment": "Không có bệnh"
+            })
+            return HttpResponse(res, content_type='application/json', status=200)
+        elif pred == 11:
+            res = json.dumps({
+                "tree": "Nho",
+                "disease": "Bệnh bạc lá/Đốm lá Isariopsis (Leaf Blight/Isariopsis Leaf Spot)",
+                "treatment": "Để kiểm soát bệnh bạc lá, hãy cắt tỉa và tiêu hủy những cành bị nhiễm bệnh. Nếu bệnh bạc lá đã xuất hiện trong vườn nho của bạn, hãy phun thuốc diệt nấm vào mùa xuân và mùa hè. Hãy nhớ rằng thuốc diệt nấm có thể gây hại cho môi trường, vì vậy hãy đọc nhãn trước khi sử dụng. Nếu bạn không muốn sử dụng thuốc diệt nấm, hãy chọn các giống nho kháng bệnh."
+            })
+            return HttpResponse(res, content_type='application/json', status=200)
+        elif pred == 13:
+            res = json.dumps({
+                "tree": "Khoai tây",
+                "disease": "Bệnh bạc lá sớm (Early Blight)",
+                "treatment": "Trong nhiều trường hợp, áp dụng các biện pháp canh tác hợp lý để duy trì sức khỏe tốt cho cây khoai tây và cà chua sẽ giữ cho tổn thất do bệnh bạc lá sớm ở mức thấp hơn mức kinh tế. Bởi vì mầm bệnh qua mùa đông trên tàn dư cây trồng bị nhiễm bệnh nên các quy trình vệ sinh tại đồng ruộng giúp giảm lượng vi khuẩn lây nhiễm ban đầu ở các vụ tiếp theo là có lợi. Cần cân nhắc việc loại bỏ các vật liệu có khả năng bị nhiễm bệnh như dây leo và trái cây mục nát khỏi vùng lân cận ruộng sản xuất. Kiểm soát các loài cỏ dại và cỏ dại, chẳng hạn như cây cà ri và cây tầm ma, vốn là vật chủ thay thế cho bệnh, trước khi trồng cây trồng mới sẽ giúp giảm nguy cơ lây truyền bệnh. Đảm bảo hạt giống hoặc cây cấy không có mầm bệnh trước khi đưa ra đồng ruộng và luân canh ruộng sang cây ký chủ không nhạy cảm cũng sẽ giúp giảm sự tích tụ vật liệu cấy trong đất. Độ trưởng thành tối ưu của củ là yếu tố quan trọng nhất để kiểm soát nhiễm trùng củ. Củ thu hoạch trước khi trưởng thành dễ bị tổn thương và nhiễm trùng. Có thể giảm nhiễm trùng củ bằng cách xử lý cẩn thận trong quá trình thu hoạch để giảm thiểu vết thương cũng như tránh thu hoạch trong điều kiện ẩm ướt nếu có thể. Củ nên được bảo quản ở nhiệt độ 50 đến 55 F, ở độ ẩm tương đối cao và thông khí nhiều để thúc đẩy quá trình lành vết thương, điều này sẽ làm giảm số lượng và mức độ nghiêm trọng của nhiễm trùng củ phát triển trong quá trình bảo quản."
+            })
+            return HttpResponse(res, content_type='application/json', status=200)
+        elif pred == 15:
+            res = json.dumps({
+                "tree": "Khoai tây",
+                "disease": "Không có bệnh",
+                "treatment": "Không có bệnh"
+            })
+            return HttpResponse(res, content_type='application/json', status=200)
+        elif pred == 14:
+            res = json.dumps({
+                "tree": "Khoai tây",
+                "disease": "Bệnh mốc sương (Late Blight)",
+                "treatment": "Sử dụng hạt giống sạch bệnh\nTrồng đầu vụ để thoát khỏi áp lực dịch bệnh cao\nKhông để nước đọng lâu trên lá\nThường xuyên theo dõi cây và loại bỏ những cây bị nhiễm bệnh, củ bị nhiễm bệnh, cây tình nguyện và cỏ dại\nVệ sinh dụng cụ, thiết bị sau khi rời ruộng\nĐăng ký để nhận thông báo tại trang web USAblight\nGiữ củ ở nơi khô ráo và ở nhiệt độ thấp (38°F)\nGiống cây trồng chịu được khi có thể\nBảo vệ cây trồng bằng thuốc diệt nấm"
+            })
+            return HttpResponse(res, content_type='application/json', status=200)
+        elif pred == 16:
             res = json.dumps({
                 "tree": "Cà chua",
                 "disease": "Bệnh đốm vi khuẩn (Bacterial Spot Disease)",
@@ -67,7 +160,7 @@ class DiseaseDetection(BaseView):
             })
             return HttpResponse(res, content_type='application/json', status=200)
 
-        elif pred == 1:
+        elif pred == 17:
             res = json.dumps({
                 "tree": "Cà chua",
                 "disease": "Bệnh bạc lá sớm (Early Blight Disease)",
@@ -75,7 +168,7 @@ class DiseaseDetection(BaseView):
             })
             return HttpResponse(res, content_type='application/json', status=200)
 
-        elif pred == 2:
+        elif pred == 18:
             res = json.dumps({
                 "tree": "Cà chua",
                 "disease": "Không có bệnh",
@@ -83,7 +176,7 @@ class DiseaseDetection(BaseView):
             })
             return HttpResponse(res, content_type='application/json', status=200)
 
-        elif pred == 3:
+        elif pred == 19:
             res = json.dumps({
                 "tree": "Cà chua",
                 "disease": "Bệnh mốc sương (Late Blight Disease)",
@@ -91,7 +184,7 @@ class DiseaseDetection(BaseView):
             })
             return HttpResponse(res, content_type='application/json', status=200)
 
-        elif pred == 4:
+        elif pred == 20:
             res = json.dumps({
                 "tree": "Cà chua",
                 "disease": "Bệnh mốc lá (Leaf Mold Disease)",
@@ -99,7 +192,7 @@ class DiseaseDetection(BaseView):
             })
             return HttpResponse(res, content_type='application/json', status=200)
 
-        elif pred == 5:
+        elif pred == 21:
             res = json.dumps({
                 "tree": "Cà chua",
                 "disease": "Bệnh đốm lá Septoria (Septoria Leaf Spot Disease)",
@@ -107,7 +200,7 @@ class DiseaseDetection(BaseView):
             })
             return HttpResponse(res, content_type='application/json', status=200)
 
-        elif pred == 6:
+        elif pred == 22:
             res = json.dumps({
                 "tree": "Cà chua",
                 "disease": "Bệnh đốm mục tiêu (Target Spot Disease)",
@@ -115,7 +208,7 @@ class DiseaseDetection(BaseView):
             })
             return HttpResponse(res, content_type='application/json', status=200)
                                 
-        elif pred == 7:
+        elif pred == 23:
             res = json.dumps({
                 "tree": "Cà chua",
                 "disease": "Bệnh virus xoăn vàng lá (Yellow Leaf Curl Virus Disease)",
@@ -123,7 +216,7 @@ class DiseaseDetection(BaseView):
             })
             return HttpResponse(res, content_type='application/json', status=200)
                                 
-        elif pred == 8:
+        elif pred == 24:
             res = json.dumps({
                 "tree": "Cà chua",
                 "disease": "Bệnh do virus khảm (Mosaic Virus)",
@@ -131,7 +224,7 @@ class DiseaseDetection(BaseView):
             })
             return HttpResponse(res, content_type='application/json', status=200)
             
-        elif pred == 9:
+        elif pred == 25:
             res = json.dumps({
                 "tree": "Cà chua",
                 "disease": "Bệnh nhện đỏ hai đốm (Two Spotted Spider Mite Disease)",
