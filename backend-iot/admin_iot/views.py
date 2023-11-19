@@ -173,7 +173,7 @@ class CrudUser(BaseView):
             })
             return HttpResponse(res, content_type='application/json', status=400)
 
-        if valid(regexPassword, editDTO.get('password')) == False and editDTO.get('password') != '':
+        if valid(regexPassword, editDTO.get('password')) == False:
             res = json.dumps({
                 "statusCode": 400,
                 "message": "Wrong Password Format!"
@@ -195,7 +195,6 @@ class CrudUser(BaseView):
             })
             return HttpResponse(res, content_type='application/json', status=400)
         
-        user = user[0]
         avatar = request.FILES.get('avatar')
         avatar_name = 'default.jpg'
         if avatar != None:
@@ -207,7 +206,7 @@ class CrudUser(BaseView):
         
         user = User(
             email=editDTO.get('email'),
-            password=Bcrypt.hashpw(editDTO.get('password')) if editDTO.get('password') != '' else user.password,
+            password=Bcrypt.hashpw(editDTO.get('password')),
             username=editDTO.get('username'),
             phone=editDTO.get('phone'),
             is_admin=False,
