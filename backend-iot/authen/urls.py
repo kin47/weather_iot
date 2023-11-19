@@ -12,4 +12,5 @@ urlpatterns = [
     path('missing-password', view=views.MissingPassword.as_view(), name='missing-password'),
     path('logout', view=views.Logout.as_view(), name='logout'),
     path('change-password', view=views.ChangePassWord.as_view(), name='change-password'),
+    path('update-info', view=views.UpdateInfo.as_view(), name='update-info'),
 ]

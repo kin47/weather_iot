@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'esp32.apps.Esp32Config',
     'authen.apps.AuthenConfig',
     'corsheaders',
-    'disease_detection.apps.DiseaseDetectionConfig'
+    'disease_detection.apps.DiseaseDetectionConfig',
+    'admin_iot.apps.AdminConfigIoT',
 ]
 
 MIDDLEWARE = [
@@ -121,7 +122,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'iot',
         'USER': 'postgres',
-        'PASSWORD': 'mKdzvotoi47',
+        'PASSWORD': '12345678',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -144,6 +145,9 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'anhnam2730@gmail.com'
 EMAIL_HOST_PASSWORD = 'nngxplqdqheimfoi'
+
+AVATAR_USER_DIR = 'authen/static/authen/avatar/'
+UPLOAD_IMAGE_DISEASE_DIR = 'disease_detection/static/disease_detection/upload'
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators

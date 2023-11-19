@@ -5,6 +5,7 @@ from datetime import datetime
 import random
 from channels.db import database_sync_to_async
 import jwt
+from authen.models import *
 
 class Esp32Socket(AsyncWebsocketConsumer):
     async def connect(self):
@@ -24,7 +25,7 @@ class Esp32Socket(AsyncWebsocketConsumer):
         # self.send('ok bro')
         print(text_data)
         data: dict = json.loads(text_data)
-        if data.get('from') != 'esp32' and data.get('from') != 'user':
+        if data.get('from') not in ('esp32', 'user', 'admin'):
             print('authen failed!')
             return
         
@@ -34,6 +35,10 @@ class Esp32Socket(AsyncWebsocketConsumer):
         
         if data.get('from') == 'user':
             await self.handleMessageFromUser(data)
+            return
+        
+        if data.get('from') == 'admin':
+            await self.handleMessageFromAdmin(data)
             return
         
         # temperature = round(data.get('temperature'), 2) if data.get('temperature') != None else None
@@ -138,6 +143,15 @@ class Esp32Socket(AsyncWebsocketConsumer):
         # print('line 70 consummers ' + message)
         
         await self.send(text_data=message)
+
+    
+    @database_sync_to_async
+    def getUserFromToken(self, access_token):
+        user_session = UserSession.objects.filter(access_token=access_token)
+        if len(user_session) == 0:
+            return None
+        
+        return user_session[0].id_user
     
     
     async def handleMessageFromUser(self, data: dict):
@@ -159,8 +173,10 @@ class Esp32Socket(AsyncWebsocketConsumer):
             await self.channel_layer.group_add('user', self.channel_name)
             return
         
-        f = open('maintenance_mode.txt', 'r')
-        maintenance_mode = int(f.readline())
+        f = open('mode.txt', 'r')
+        maintenance_mode, led_auto_mode, pump_auto_mode = map(int, f.readline().split())
+        f.close()
+        
         if maintenance_mode == 1:
             await self.channel_layer.group_send(
                 'user',
@@ -173,14 +189,150 @@ class Esp32Socket(AsyncWebsocketConsumer):
             )
             return
         
+        user = await self.getUserFromToken(access_token)
+        
+        message = json.dumps({
+            'from': 'user',
+            'ledMode': data.get('ledMode') if user.bat_tat_led == True and led_auto_mode == 0 else 0,
+            'pumpMode': data.get('pumpMode') if user.bat_tat_pump == True and pump_auto_mode == 0 else 0
+        })
+        
+        if user.bat_tat_led == True and data.get('drive') == 'LED' and led_auto_mode == 1:
+            await self.channel_layer.group_send(
+                'user',
+                {
+                    'type': 'send_to_room',
+                    'message': json.dumps({
+                        'message': 'LED đang ở chế độ tự động'
+                    })
+                }
+            )
+            return
+        
+        if user.bat_tat_pump == True and data.get('drive') == 'PUMP' and pump_auto_mode == 1:
+            await self.channel_layer.group_send(
+                'user',
+                {
+                    'type': 'send_to_room',
+                    'message': json.dumps({
+                        'message': 'PUMP đang ở chế độ tự động'
+                    })
+                }
+            )
+            return
+        
+        if user.bat_tat_led == True and data.get('drive') == 'LED' and led_auto_mode == 0:
+            await self.channel_layer.group_send(
+                'esp32',
+                {
+                    'type': 'send_to_room',
+                    'message': message
+                }
+            )
+            return
+        
+        if user.bat_tat_pump == True and data.get('drive') == 'PUMP' and pump_auto_mode == 0:
+            await self.channel_layer.group_send(
+                'esp32',
+                {
+                    'type': 'send_to_room',
+                    'message': message
+                }
+            )
+            return
+        
+        if user.bat_tat_led == False and data.get('drive') == 'LED':
+            await self.channel_layer.group_send(
+                'user',
+                {
+                    'type': 'send_to_room',
+                    'message': json.dumps({
+                        'message': 'Bạn không có quyền sử dụng chức năng bật tắt LED'
+                    })
+                }
+            )
+            return
+        
+        if user.bat_tat_pump == False and data.get('drive') == 'PUMP':
+            await self.channel_layer.group_send(
+                'user',
+                {
+                    'type': 'send_to_room',
+                    'message': json.dumps({
+                        'message': 'Bạn không có quyền sử dụng chức năng bật tắt PUMP'
+                    })
+                }
+            )
+            return
+    
+    
+    async def handleMessageFromAdmin(self, data: dict):
+        access_token = data.get('token')
+        if jwt.valid_token(access_token) == False:
+            await self.channel_layer.group_send(
+                'admin',
+                {
+                    'type': 'send_to_room',
+                    'message': json.dumps({
+                        'message': 'UnAuthorize'
+                    })
+                }
+            )
+            return
+        
+        f = open('mode.txt', 'r')
+        maintenance_mode, led_auto_mode, pump_auto_mode = map(int, f.readline().split())
+        f.close()
+        
+        first = data.get('first')
+        if first == 1:
+            await self.channel_layer.group_add('admin', self.channel_name)
+            await self.channel_layer.group_send(
+                'admin',
+                {
+                    'type': 'send_to_room',
+                    'message': json.dumps({
+                        'maintenanceMode': maintenance_mode,
+                        'ledAutoMode': led_auto_mode,
+                        'pumpAutoMode': pump_auto_mode
+                    })
+                }
+            )
+            return
+        
+        user = await self.getUserFromToken(access_token)
+        if user.is_admin == False:
+            await self.channel_layer.group_send(
+                'admin',
+                {
+                    'type': 'send_to_room',
+                    'message': json.dumps({
+                        'message': 'Admin UnAuthorize'
+                    })
+                }
+            )
+            return
+        
+        maintenance_mode = data.get('maintenanceMode') if data.get('maintenanceMode') != None and data.get('maintenanceMode') in (0, 1) else maintenance_mode
+        led_auto_mode = data.get('ledAutoMode') if data.get('ledAutoMode') != None and data.get('ledAutoMode') in (0, 1) else led_auto_mode
+        pump_auto_mode = data.get('pumpAutoMode') if data.get('pumpAutoMode') != None and data.get('pumpAutoMode') in (0, 1) else pump_auto_mode
+        
+        led_auto_mode = led_auto_mode if maintenance_mode == 0 else 0
+        pump_auto_mode = pump_auto_mode if maintenance_mode == 0 else 0
+        
+        f = open('mode.txt', 'w')
+        f.write(f'{maintenance_mode} {led_auto_mode} {pump_auto_mode}')
+        f.close()
+        
         await self.channel_layer.group_send(
             'esp32',
             {
                 'type': 'send_to_room',
                 'message': json.dumps({
-                    'from': 'user',
-                    'ledMode': data.get('ledMode'),
-                    'pumpMode': data.get('pumpMode')
+                    'from': 'admin',
+                    'maintenanceMode': maintenance_mode,
+                    'ledAutoMode': led_auto_mode,
+                    'pumpAutoMode': pump_auto_mode
                 })
             }
         )

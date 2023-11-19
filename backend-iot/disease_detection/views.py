@@ -8,20 +8,60 @@ from tensorflow.keras.models import load_model
 import json
 import os
 from tensorflow.keras.preprocessing.image import load_img
+from backend_weather_iot.settings import UPLOAD_IMAGE_DISEASE_DIR
+from datetime import datetime
+import jwt
+from .models import *
+from authen.views import getUserFromToken
+from backend_weather_iot.settings import Pagination
+from django.db import connection
+import openpyxl
+from openpyxl.styles import Font, Alignment
+from openpyxl.drawing.image import Image as ExcelImage
+from PIL import Image
+import io
 
-model = load_model('C:/Users/ADMIN/Desktop/Hoc/This semester/IoT/weather_iot/backend-iot/model.h5')
+model = load_model('model.h5')
 
 # Create your views here.
 class DiseaseDetection(BaseView):
+    def hasUserFunction(self, access_token):
+        user = getUserFromToken(access_token)
+        return user.doan_benh
+
+
     def post(self, request: HttpRequest):
+        if request.headers.get('Authorization') == None:
+            res = json.dumps({
+                "statusCode": 401,
+                "message": "Unauthorize!"
+            })
+            return HttpResponse(res, content_type='application/json', status=401)
+
+        access_token = request.headers.get('Authorization').split(' ')[1]
+        if jwt.valid_token(access_token) == False:
+            res = json.dumps({
+                "statusCode": 401,
+                "message": "Unauthorize!"
+            })
+            return HttpResponse(res, content_type='application/json', status=401)
+
+        if self.hasUserFunction(access_token) == False:
+            res = json.dumps({
+                "statusCode": 403,
+                "message": "Do not have permission to use this function"
+            })
+            return HttpResponse(res, content_type='application/json', status=403)
+
         # todo authentication
         image = request.FILES['image']
         filename = image.name
         print("@@ Input posted = ", filename)
 
+        image_name = f'{round(1000 * datetime.timestamp(datetime.now()))}_{filename}'
         file_path = os.path.join(
-            "C:/Users/ADMIN/Desktop/Hoc/This semester/IoT/weather_iot/backend-iot/upload/",
-            filename,
+            UPLOAD_IMAGE_DISEASE_DIR,
+            image_name,
         )
         with open(file_path, 'wb') as destination:
             for chunk in image.chunks():
@@ -38,197 +78,382 @@ class DiseaseDetection(BaseView):
         result = model.predict(test_image)  # predict diseased plant or not
         print("@@ Raw result = ", result)
 
-        pred = np.argmax(result, axis=1)
-        print(pred)
-        if pred == 0:
-            res = json.dumps({
-                "tree": "Táo",
-                "disease": "Bệnh ghẻ trên cây táo (Apple Scab Disease)",
-                "treatment": "Giữ cho môi trường xung quanh cây trồng sạch sẽ bằng cách loại bỏ cỏ dại, mảnh vụn thực vật, các bộ phận của cây bị thiệt hại, phát triển của các loại cây không mong muốn và các thực vật xung quanh tự mọc và không được bảo vệ."
-            })
-            return HttpResponse(res, content_type='application/json', status=200)
-        elif pred == 1:
-            res = json.dumps({
-                "tree": "Táo",
-                "disease": "Bệnh thối đen (Apple Black Rot)",
-                "treatment": "Xử lý bệnh thối đen trên cây táo bắt đầu bằng công tác vệ sinh. Vì bào tử nấm mùa đông trên lá rụng, trái cây ướp xác, vỏ cây chết và vỏ hộp , nên điều quan trọng là phải dọn sạch tất cả các mảnh vụn rơi và trái cây chết và tránh xa cây."
-            })
-            return HttpResponse(res, content_type='application/json', status=200)
-        elif pred == 2:
-            res = json.dumps({
-                "tree": "Táo",
-                "disease": "Bệnh gỉ sắt táo (Cedar Apple Rust)",
-                "treatment": "Táo bị bệnh gỉ sắt táo cần được chăm sóc đặc biệt để khắc phục bệnh mà vẫn sinh quả. Đầu tiên, hãy kiểm tra xem bạn có loài cây bách xù nào gần cây táo của bạn không. Nếu chúng bị nhiễm bệnh, chúng sẽ tạo ra những vết thương vào mùa xuân và mùa hè có thể phát triển khá lớn. Chúng tạo ra những đường gân màu cam đặc biệt khó bỏ lỡ. Các bào tử từ chúng có thể lây nhiễm bất kỳ cây táo nào gần đó.\nMột cách để kiểm soát căn bệnh này là loại bỏ hoặc tiêu diệt bất kỳ cây bách nào gần đó. Hoặc bạn chỉ có thể theo dõi chúng để tìm kiếm và phá hủy cây hoặc cắt tỉa và phá hủy các nhánh bằng các lỗ hổng. Một cách khác để kiểm soát bệnh gỉ sắt táo là trồng các giống táo có khả năng chống nhiễm trùng: Red Delicious, McIntosh, Wineap, Empire, và các loại khác.\nMột bình xịt thuốc diệt nấm cũng có thể được sử dụng. Vườn ươm địa phương của bạn có thể giúp bạn tìm thấy bình xịt thích hợp. Tuy nhiên, phòng ngừa thường là một cách tốt hơn để kiểm soát bệnh này trên cây táo. Khoảng 1.000 feet giữa táo và các loài cây bách xù là đủ để bảo vệ cây của bạn. Ngoài ra, hãy nhớ rằng mức độ nhiễm trùng thấp sẽ không ảnh hưởng đến cây trồng của bạn rất nhiều."
-            })
-            return HttpResponse(res, content_type='application/json', status=200)
-        elif pred == 3:
-            res = json.dumps({
-                "tree": "Táo",
-                "disease": "Không có bệnh",
-                "treatment": "Không có bệnh"
-            })
-            return HttpResponse(res, content_type='application/json', status=200)
-        elif pred == 4:
-            res = json.dumps({
-                "tree": "Ảnh nền",
-                "disease": "Ảnh nền không chứa lá cây",
-                "treatment": "Hãy đảm bảo rằng bạn đã chụp đúng ảnh lá cây, và chụp cận cảnh 1 chiếc lá"
-            })
-            return HttpResponse(res, content_type='application/json', status=200)
-        elif pred == 5:
-            res = json.dumps({
-                "tree": "Ngô",
-                "disease": "Đốm lá Cercospora/Đốm lá xám (Cercospora Leaf Spot/Gray Leaf Spot)",
-                "treatment": "Để kiểm soát bệnh đốm lá ngô, có thể áp dụng các biện pháp như sử dụng giống ngô chống chịu bệnh, quản lý cân bằng độ ẩm trong vườn, tránh gieo cấy quá sát nhau, thực hiện xoá bỏ và tiêu hủy những phần cây bị nhiễm bệnh, và sử dụng thuốc trừ sâu hoặc thuốc bảo vệ thực vật phù hợp nếu cần thiết."
-            })
-            return HttpResponse(res, content_type='application/json', status=200)
-        elif pred == 6:
-            res = json.dumps({
-                "tree": "Ngô",
-                "disease": "Bệnh gỉ sắt thường gặp trên ngô (Common Rust)",
-                "treatment": "Biện pháp quản lý tốt nhất là sử dụng các giống ngô lai kháng bệnh. Thuốc diệt nấm cũng có thể có lợi, đặc biệt nếu áp dụng sớm khi đã xuất hiện ít mụn mủ trên lá."
-            })
-            return HttpResponse(res, content_type='application/json', status=200)
-        elif pred == 8:
-            res = json.dumps({
-                "tree": "Ngô",
-                "disease": "Không có bệnh",
-                "treatment": "Không có bệnh"
-            })
-            return HttpResponse(res, content_type='application/json', status=200)
-        elif pred == 7:
-            res = json.dumps({
-                "tree": "Ngô",
-                "disease": "Bệnh bạc lá nghệ trên ngô (Northern Leaf Blight)",
-                "treatment": "Sử dụng giống lai kháng bệnh. Thuốc diệt nấm có thể được sử dụng trên các giống cận huyết để sản xuất hạt giống trong giai đoạn đầu của bệnh này. Các biện pháp luân canh và làm đất có thể hữu ích trong một số trường hợp."
-            })
-            return HttpResponse(res, content_type='application/json', status=200)
-        elif pred == 9:
-            res = json.dumps({
-                "tree": "Nho",
-                "disease": "Bệnh thối đen (Grape Black Rot)",
-                "treatment": "Những cành cắt tỉa và quả ướp xác bị nhiễm bệnh phải được loại bỏ, đốt và/hoặc chôn trong đất trước khi cây mới bắt đầu phát triển vào mùa xuân. Ở những vườn nho có các giống mẫn cảm hoặc nơi bệnh thối đen đã xảy ra vào năm trước, nên phun thuốc diệt nấm vào đầu mùa để ngăn ngừa nhiễm trùng sớm nhất. Nếu nhiễm trùng trở nên nhiều, việc bảo vệ chống thối quả là rất khó khăn vào cuối mùa sinh trưởng. Khuyến khích trồng các giống kháng bệnh."
-            })
-            return HttpResponse(res, content_type='application/json', status=200)
-        elif pred == 10:
-            res = json.dumps({
-                "tree": "Nho",
-                "disease": "Sởi đen (Esca/Black Measles)",
-                "treatment": "Hiện nay, chưa có chiến lược quản lý hiệu quả bệnh sởi. Những người trồng nho làm rượu vang với những vườn nho nhỏ thường yêu cầu nhân viên hiện trường loại bỏ những quả bị nhiễm bệnh trước khi thu hoạch. Nho khô bị bệnh sởi sẽ bị loại bỏ trong quá trình thu hoạch hoặc tại nhà đóng gói, trong khi người trồng nho sẽ để lại quả bị bệnh trên cây nho. Nghiên cứu hiện tại tập trung vào việc bảo vệ các vết cắt tỉa khỏi bị nhiễm nấm để giảm thiểu nấm nghi ngờ xâm nhập vào vết thương mới."
-            })
-            return HttpResponse(res, content_type='application/json', status=200)
-        elif pred == 12:
-            res = json.dumps({
-                "tree": "Nho",
-                "disease": "Không có bệnh",
-                "treatment": "Không có bệnh"
-            })
-            return HttpResponse(res, content_type='application/json', status=200)
-        elif pred == 11:
-            res = json.dumps({
-                "tree": "Nho",
-                "disease": "Bệnh bạc lá/Đốm lá Isariopsis (Leaf Blight/Isariopsis Leaf Spot)",
-                "treatment": "Để kiểm soát bệnh bạc lá, hãy cắt tỉa và tiêu hủy những cành bị nhiễm bệnh. Nếu bệnh bạc lá đã xuất hiện trong vườn nho của bạn, hãy phun thuốc diệt nấm vào mùa xuân và mùa hè. Hãy nhớ rằng thuốc diệt nấm có thể gây hại cho môi trường, vì vậy hãy đọc nhãn trước khi sử dụng. Nếu bạn không muốn sử dụng thuốc diệt nấm, hãy chọn các giống nho kháng bệnh."
-            })
-            return HttpResponse(res, content_type='application/json', status=200)
-        elif pred == 13:
-            res = json.dumps({
-                "tree": "Khoai tây",
-                "disease": "Bệnh bạc lá sớm (Early Blight)",
-                "treatment": "Trong nhiều trường hợp, áp dụng các biện pháp canh tác hợp lý để duy trì sức khỏe tốt cho cây khoai tây và cà chua sẽ giữ cho tổn thất do bệnh bạc lá sớm ở mức thấp hơn mức kinh tế. Bởi vì mầm bệnh qua mùa đông trên tàn dư cây trồng bị nhiễm bệnh nên các quy trình vệ sinh tại đồng ruộng giúp giảm lượng vi khuẩn lây nhiễm ban đầu ở các vụ tiếp theo là có lợi. Cần cân nhắc việc loại bỏ các vật liệu có khả năng bị nhiễm bệnh như dây leo và trái cây mục nát khỏi vùng lân cận ruộng sản xuất. Kiểm soát các loài cỏ dại và cỏ dại, chẳng hạn như cây cà ri và cây tầm ma, vốn là vật chủ thay thế cho bệnh, trước khi trồng cây trồng mới sẽ giúp giảm nguy cơ lây truyền bệnh. Đảm bảo hạt giống hoặc cây cấy không có mầm bệnh trước khi đưa ra đồng ruộng và luân canh ruộng sang cây ký chủ không nhạy cảm cũng sẽ giúp giảm sự tích tụ vật liệu cấy trong đất. Độ trưởng thành tối ưu của củ là yếu tố quan trọng nhất để kiểm soát nhiễm trùng củ. Củ thu hoạch trước khi trưởng thành dễ bị tổn thương và nhiễm trùng. Có thể giảm nhiễm trùng củ bằng cách xử lý cẩn thận trong quá trình thu hoạch để giảm thiểu vết thương cũng như tránh thu hoạch trong điều kiện ẩm ướt nếu có thể. Củ nên được bảo quản ở nhiệt độ 50 đến 55 F, ở độ ẩm tương đối cao và thông khí nhiều để thúc đẩy quá trình lành vết thương, điều này sẽ làm giảm số lượng và mức độ nghiêm trọng của nhiễm trùng củ phát triển trong quá trình bảo quản."
-            })
-            return HttpResponse(res, content_type='application/json', status=200)
-        elif pred == 15:
-            res = json.dumps({
-                "tree": "Khoai tây",
-                "disease": "Không có bệnh",
-                "treatment": "Không có bệnh"
-            })
-            return HttpResponse(res, content_type='application/json', status=200)
-        elif pred == 14:
-            res = json.dumps({
-                "tree": "Khoai tây",
-                "disease": "Bệnh mốc sương (Late Blight)",
-                "treatment": "Sử dụng hạt giống sạch bệnh\nTrồng đầu vụ để thoát khỏi áp lực dịch bệnh cao\nKhông để nước đọng lâu trên lá\nThường xuyên theo dõi cây và loại bỏ những cây bị nhiễm bệnh, củ bị nhiễm bệnh, cây tình nguyện và cỏ dại\nVệ sinh dụng cụ, thiết bị sau khi rời ruộng\nĐăng ký để nhận thông báo tại trang web USAblight\nGiữ củ ở nơi khô ráo và ở nhiệt độ thấp (38°F)\nGiống cây trồng chịu được khi có thể\nBảo vệ cây trồng bằng thuốc diệt nấm"
-            })
-            return HttpResponse(res, content_type='application/json', status=200)
-        elif pred == 16:
-            res = json.dumps({
-                "tree": "Cà chua",
-                "disease": "Bệnh đốm vi khuẩn (Bacterial Spot Disease)",
-                "treatment": "Thuốc diệt nấm đồng là phương pháp điều trị được khuyên dùng phổ biến nhất đối với bệnh đốm lá do vi khuẩn. Sử dụng thuốc diệt nấm đồng như một biện pháp phòng ngừa sau khi bạn gieo hạt nhưng trước khi chuyển cây vào nơi ở cố định của chúng. Bạn có thể phun thuốc diệt nấm đồng trước hoặc sau khi mưa, nhưng không nên phun thuốc diệt nấm đồng khi trời đang mưa. Nếu bạn thấy dấu hiệu của bệnh đốm lá do vi khuẩn, hãy phun thuốc diệt nấm đồng trong thời gian từ 7 đến 10 ngày, sau đó phun lại trong một tuần sau khi cây được chuyển ra ruộng. Thực hiện xử lý bảo trì 10 ngày một lần khi thời tiết khô ráo và 5 đến 7 ngày một lần khi thời tiết mưa."
-            })
-            return HttpResponse(res, content_type='application/json', status=200)
+        pred = np.argmax(result, axis=1)[0]
 
-        elif pred == 17:
-            res = json.dumps({
-                "tree": "Cà chua",
-                "disease": "Bệnh bạc lá sớm (Early Blight Disease)",
-                "treatment": "Cà chua bị bệnh bạc lá sớm cần được chăm sóc ngay trước khi bệnh tấn công cây. Phun kỹ cây (cả phần dưới của lá) bằng chất cô đặc thuốc diệt nấm đồng lỏng Bonide hoặc Bonide Tomato & Rau. Cả hai phương pháp xử lý này đều là hữu cơ."
-            })
-            return HttpResponse(res, content_type='application/json', status=200)
+        diseases = Diseases.objects.get(pk=pred)
+        res = json.dumps({
+            'tree': diseases.tree,
+            'disease': diseases.disease,
+            'treatment': diseases.treatment
+        })
 
-        elif pred == 18:
-            res = json.dumps({
-                "tree": "Cà chua",
-                "disease": "Không có bệnh",
-                "treatment": "Không có bệnh"
-            })
-            return HttpResponse(res, content_type='application/json', status=200)
+        user = getUserFromToken(access_token)
 
-        elif pred == 19:
-            res = json.dumps({
-                "tree": "Cà chua",
-                "disease": "Bệnh mốc sương (Late Blight Disease)",
-                "treatment": "Phun thuốc diệt nấm là cách hiệu quả nhất để ngăn ngừa bệnh mốc sương. Đối với những người làm vườn thông thường và nhà sản xuất thương mại, có thể sử dụng thuốc diệt nấm bảo vệ như chlorothalonil (ví dụ: Bravo, Echo, Equus hoặc Daconil) và Mancozeb (Manzate)."
-            })
-            return HttpResponse(res, content_type='application/json', status=200)
+        HistoryPredictDisease.objects.create(
+            user=user,
+            diseases=diseases,
+            image=image_name,
+            sent_at=datetime.now()
+        )
 
-        elif pred == 20:
-            res = json.dumps({
-                "tree": "Cà chua",
-                "disease": "Bệnh mốc lá (Leaf Mold Disease)",
-                "treatment": "Sử dụng tưới nhỏ giọt và tránh tưới lá. Dùng cọc, dây hoặc tỉa cây để cây đứng vững và tăng luồng không khí trong và xung quanh cây. Loại bỏ và tiêu hủy (đốt) tất cả tàn dư thực vật sau khi thu hoạch."
-            })
-            return HttpResponse(res, content_type='application/json', status=200)
+        return HttpResponse(res, content_type='application/json', status=200)
 
-        elif pred == 21:
-            res = json.dumps({
-                "tree": "Cà chua",
-                "disease": "Bệnh đốm lá Septoria (Septoria Leaf Spot Disease)",
-                "treatment": "Loại bỏ những lá bị nhiễm bệnh: Loại bỏ những lá bị nhiễm bệnh ngay lập tức và nhớ rửa tay và cắt tỉa thật kỹ trước khi làm việc với những cây không bị nhiễm bệnh.\nXem xét các lựa chọn thuốc diệt nấm hữu cơ: Thuốc diệt nấm có chứa đồng hoặc kali bicarbonate sẽ giúp ngăn ngừa sự lây lan của bệnh. Bắt đầu phun thuốc ngay khi các triệu chứng đầu tiên xuất hiện và làm theo hướng dẫn trên nhãn để tiếp tục quản lý.\nXem xét thuốc diệt nấm hóa học: Mặc dù các lựa chọn hóa học không phải là lý tưởng nhưng chúng có thể là lựa chọn duy nhất để kiểm soát tình trạng nhiễm trùng nặng. Một trong những loại ít độc nhất và hiệu quả nhất là chlorothalonil (được bán dưới tên Fungonil và Daconil)."
-            })
-            return HttpResponse(res, content_type='application/json', status=200)
 
-        elif pred == 22:
+class HistoryPredictDiseaseView(BaseView):
+    def hasUserFunction(sefl, access_token):
+        user = getUserFromToken(access_token)
+        return user.xem_export_lich_su_doan_benh
+
+
+    def get(self, request: HttpRequest):
+        if request.headers.get('Authorization') == None:
             res = json.dumps({
-                "tree": "Cà chua",
-                "disease": "Bệnh đốm mục tiêu (Target Spot Disease)",
-                "treatment": "Nhiều loại thuốc diệt nấm được đăng ký để kiểm soát bệnh Target Spot trên cà chua. Người trồng nên tham khảo hướng dẫn quản lý dịch bệnh trong khu vực để biết các sản phẩm được khuyến nghị. Các sản phẩm có chứa chlorothalonil, mancozeb và copper oxychloride đã được chứng minh là có khả năng kiểm soát tốt Target Spot trong các thử nghiệm nghiên cứu"
+                "statusCode": 401,
+                "message": "Unauthorize!"
             })
-            return HttpResponse(res, content_type='application/json', status=200)
-                                
-        elif pred == 23:
+            return HttpResponse(res, content_type='application/json', status=401)
+
+        access_token = request.headers.get('Authorization').split(' ')[1]
+        if jwt.valid_token(access_token) == False:
             res = json.dumps({
-                "tree": "Cà chua",
-                "disease": "Bệnh virus xoăn vàng lá (Yellow Leaf Curl Virus Disease)",
-                "treatment": "Kiểm tra cây để phát hiện bọ phấn trắng hai lần mỗi tuần. Nếu ruồi trắng bắt đầu xuất hiện, hãy phun azadirachtin (Neem), pyrethrin hoặc xà phòng diệt côn trùng. Để kiểm soát hiệu quả hơn, nên luân phiên ít nhất hai loại thuốc trừ sâu trên trong mỗi lần phun."
+                "statusCode": 401,
+                "message": "Unauthorize!"
             })
-            return HttpResponse(res, content_type='application/json', status=200)
-                                
-        elif pred == 24:
+            return HttpResponse(res, content_type='application/json', status=401)
+
+        if self.hasUserFunction(access_token) == False:
             res = json.dumps({
-                "tree": "Cà chua",
-                "disease": "Bệnh do virus khảm (Mosaic Virus)",
-                "treatment": "Không có cách chữa trị các bệnh do virus như bệnh khảm khi cây bị nhiễm bệnh. Do đó, bạn nên nỗ lực hết sức để ngăn chặn dịch bệnh xâm nhập vào khu vườn của mình."
+                "statusCode": 403,
+                "message": "Do not have permission to use this function"
             })
-            return HttpResponse(res, content_type='application/json', status=200)
-            
-        elif pred == 25:
+            return HttpResponse(res, content_type='application/json', status=403)
+
+        user = getUserFromToken(access_token)
+        cursor = connection.cursor()
+        start_date = request.GET.get('startDate')
+        end_date = request.GET.get('endDate')
+
+        try:
+            page = Pagination.get('CURRENT_PAGE') if request.GET.get('page') == None else int(request.GET.get('page'))
+            item_in_page = Pagination.get('ITEM_IN_PAGE') if request.GET.get('iip') == None else int(request.GET.get('iip'))
+            pages_in_webview = Pagination.get('PAGES_IN_WEBVIEW') if request.GET.get('piwv') == None else int(request.GET.get('piwv'))
+        except Exception as error:
             res = json.dumps({
-                "tree": "Cà chua",
-                "disease": "Bệnh nhện đỏ hai đốm (Two Spotted Spider Mite Disease)",
-                "treatment": "bifenazate (Acramite): Nhóm UN, một chất độc thần kinh tồn dư lâu dài abamectin (Agri-Mek): Nhóm 6, có nguồn gốc từ vi khuẩn đất spirotetramat (Movento): Nhóm 23, chủ yếu ảnh hưởng đến giai đoạn chưa trưởng thành spiromesifen (Oberon 2SC): Nhóm 23, chủ yếu ảnh hưởng đến giai đoạn chưa trưởng thành. Các sản phẩm được liệt kê trong OMRI bao gồm: xà phòng diệt côn trùng (M-Pede)dầu neem (Bộ ba) dầu đậu nành (Dầu phun thuốc trừ sâu vàng) Với hầu hết các loại thuốc diệt bọ ve (không bao gồm bifenazate), phun 2 lần, cách nhau khoảng 5-7 ngày, để giúp kiểm soát bọ ve chưa trưởng thành đang trong giai đoạn trứng và được bảo vệ trong lần phun đầu tiên. Luân phiên giữa các sản phẩm sau 2 lần bôi giúp ngăn ngừa hoặc làm chậm tình trạng kháng thuốc."
+                "statusCode": 400,
+                "message": f"{error}"
             })
-            return HttpResponse(res, content_type='application/json', status=200)
-            ...
+            return HttpResponse(res, content_type='application/json', status=400)
+
+        totalRecords = None
+        records = []
+
+        if start_date == None and end_date != None:
+            res = json.dumps({
+                "statusCode": 400,
+                "message": "Start date is not null"
+            })
+
+            return HttpResponse(res, content_type='application/json', status=400)
+
+        if start_date != None and end_date == None:
+            res = json.dumps({
+                "statusCode": 400,
+                "message": "End date is not null"
+            })
+
+            return HttpResponse(res, content_type='application/json', status=400)
+
+        if start_date != None and end_date != None:
+            try:
+                year, month, day = start_date.split('T')[0].split('-')
+                hour, minute, = start_date.split('T')[1].split(':')
+                datetime(int(year), int(month), int(day), int(hour), int(minute))
+            except Exception as error:
+                res = json.dumps({
+                    "statusCode": 400,
+                    "message": f"Start date param is wrong format: {error}"
+                })
+                return HttpResponse(res, content_type='application/json', status=400)
+
+            try:
+                year, month, day = end_date.split('T')[0].split('-')
+                hour, minute, = end_date.split('T')[1].split(':')
+                datetime(int(year), int(month), int(day), int(hour), int(minute))
+            except Exception as error:
+                res = json.dumps({
+                    "statusCode": 400,
+                    "message": f"End date param is wrong format: {error}"
+                })
+                return HttpResponse(res, content_type='application/json', status=400)
+
+            start_date = f"{start_date.split('T')[0]} {start_date.split('T')[1]}:00.000000"
+            end_date = f"{end_date.split('T')[0]} {end_date.split('T')[1]}:59.999999"
+
+            if datetime.strptime(start_date, '%Y-%m-%d %H:%M:%S.%f') > datetime.strptime(end_date, '%Y-%m-%d %H:%M:%S.%f'):
+                res = json.dumps({
+                    "statusCode": 400,
+                    "message": "Start date not great than End date"
+                })
+                return HttpResponse(res, content_type='application/json', status=400)
+
+            cursor.execute(
+                f"select hpd.sent_at, d.tree, hpd.image, d.disease\r\n\
+                from diseases d, history_predict_disease hpd\r\n\
+                where hpd.user_id = %s and hpd.disease_id = d.id and sent_at >= %s and sent_at <= %s order by sent_at desc offset {(page - 1) * item_in_page} limit {item_in_page}",
+                [user.id, f"{start_date}", f"{end_date}"]
+            )
+            records = cursor.fetchall()
+
+            cursor.execute(
+                f"select count(*) as total\r\n\
+                from diseases d, history_predict_disease hpd\r\n\
+                where hpd.user_id = %s and hpd.disease_id = d.id and sent_at >= %s and sent_at <= %s",
+                [user.id, f"{start_date}", f"{end_date}"]
+            )
+            totalRecords = cursor.fetchone()[0]
+
+        if start_date == None and end_date == None:
+            cursor.execute(
+                f"select hpd.sent_at, d.tree, hpd.image, d.disease\r\n\
+                from diseases d, history_predict_disease hpd\r\n\
+                where hpd.user_id = %s and hpd.disease_id = d.id order by sent_at desc offset {(page - 1) * item_in_page} limit {item_in_page}",
+                [user.id]
+            )
+            records = cursor.fetchall()
+
+            cursor.execute(
+                f"select count(*) as total\r\n\
+                from diseases d, history_predict_disease hpd\r\n\
+                where hpd.user_id = %s and hpd.disease_id = d.id",
+                [user.id]
+            )
+            totalRecords = cursor.fetchone()[0]
+
+        data = []
+        index = 1
+        for item in records:
+            data.append({
+                "STT": index,
+                "sentAt": item[0].strftime("%d-%m-%Y %H:%M:%S"),
+                "tree": item[1],
+                "image": f'static/disease_detection/upload/{item[2]}',
+                "disease": item[3]
+            })
+            index += 1
+
+        totalPages = totalRecords // item_in_page if totalRecords % item_in_page == 0 else totalRecords // item_in_page + 1
+        start_page = page - (page % pages_in_webview if page % pages_in_webview != 0 else pages_in_webview) + 1
+        end_page = start_page + pages_in_webview - 1 if start_page + pages_in_webview - 1 <= totalPages else totalPages
+
+        res = json.dumps({
+            "dataOfPage": list(data),
+            "currentPage": page,
+            "totalRecords": totalRecords,
+            "totalPages": totalPages,
+            "startPage": start_page,
+            "endPage": end_page
+        })
+        return HttpResponse(res, content_type='application/json', status=200)
+
+
+class HistoryPredictDiseaseDataExportExcel(BaseView):
+    def hasUserFunction(sefl, access_token):
+        user = getUserFromToken(access_token)
+        return user.xem_export_lich_su_doan_benh
+
+    def get(self, request: HttpRequest):
+        if request.headers.get('Authorization') == None:
+            res = json.dumps({
+                "statusCode": 401,
+                "message": "Unauthorize!"
+            })
+            return HttpResponse(res, content_type='application/json', status=401)
+
+        access_token = request.headers.get('Authorization').split(' ')[1]
+        if jwt.valid_token(access_token) == False:
+            res = json.dumps({
+                "statusCode": 401,
+                "message": "Unauthorize!"
+            })
+            return HttpResponse(res, content_type='application/json', status=401)
+
+        user = getUserFromToken(access_token)
+        cursor = connection.cursor()
+        start_date = request.GET.get('startDate')
+        end_date = request.GET.get('endDate')
+        records = []
+
+        if start_date == None and end_date != None:
+            res = json.dumps({
+                "statusCode": 400,
+                "message": "Start date is not null"
+            })
+
+            return HttpResponse(res, content_type='application/json', status=400)
+
+        if start_date != None and end_date == None:
+            res = json.dumps({
+                "statusCode": 400,
+                "message": "End date is not null"
+            })
+
+            return HttpResponse(res, content_type='application/json', status=400)
+
+        if self.hasUserFunction(access_token) == False:
+            res = json.dumps({
+                "statusCode": 403,
+                "message": "Do not have permission to use this function"
+            })
+            return HttpResponse(res, content_type='application/json', status=403)
+
+        if start_date != None and end_date != None:
+            try:
+                year, month, day = start_date.split('T')[0].split('-')
+                hour, minute, = start_date.split('T')[1].split(':')
+                datetime(int(year), int(month), int(day), int(hour), int(minute))
+            except Exception as error:
+                res = json.dumps({
+                    "statusCode": 400,
+                    "message": f"Start date param is wrong format: {error}"
+                })
+                return HttpResponse(res, content_type='application/json', status=400)
+
+            try:
+                year, month, day = end_date.split('T')[0].split('-')
+                hour, minute, = end_date.split('T')[1].split(':')
+                datetime(int(year), int(month), int(day), int(hour), int(minute))
+            except Exception as error:
+                res = json.dumps({
+                    "statusCode": 400,
+                    "message": f"End date param is wrong format: {error}"
+                })
+                return HttpResponse(res, content_type='application/json', status=400)
+
+            start_date = f"{start_date.split('T')[0]} {start_date.split('T')[1]}:00.000000"
+            end_date = f"{end_date.split('T')[0]} {end_date.split('T')[1]}:59.999999"
+
+            if datetime.strptime(start_date, '%Y-%m-%d %H:%M:%S.%f') > datetime.strptime(end_date, '%Y-%m-%d %H:%M:%S.%f'):
+                res = json.dumps({
+                    "statusCode": 400,
+                    "message": "Start date not great than End date"
+                })
+                return HttpResponse(res, content_type='application/json', status=400)
+
+            cursor.execute(
+                f"select hpd.sent_at, d.tree, hpd.image, d.disease\r\n\
+                from diseases d, history_predict_disease hpd\r\n\
+                where hpd.user_id = %s and hpd.disease_id = d.id and sent_at >= %s and sent_at <= %s order by sent_at desc",
+                [user.id, f"{start_date}", f"{end_date}"]
+            )
+            records = cursor.fetchall()
+
+        if start_date == None and end_date == None:
+            cursor.execute(
+                f"select hpd.sent_at, d.tree, hpd.image, d.disease\r\n\
+                from diseases d, history_predict_disease hpd\r\n\
+                where hpd.user_id = %s and hpd.disease_id = d.id order by sent_at desc",
+                [user.id]
+            )
+            records = cursor.fetchall()
+
+        # Tạo một tệp Excel mới
+        workbook = openpyxl.Workbook()
+
+        # Chọn trang tính cần làm việc
+        sheet = workbook.active
+
+        sheet.column_dimensions['D'].width = 20
+
+        # Gộp ô A1, B1, C1 và đặt nội dung là "Title"
+        sheet.merge_cells('A1:E1')
+        if start_date == None and end_date == None:
+            sheet['A1'] = 'Tất cả dữ đoán bệnh'
+
+        if start_date != None and end_date != None:
+            sheet['A1'] = f'Dữ liệu đoán bệnh từ {start_date} đến {end_date}'
+
+        bold_font = Font(bold=True)
+        centered_alignment = Alignment(horizontal='center', vertical='center')
+
+        sheet['A1'].font = Font(bold=True, size=12)
+        sheet['A1'].alignment = centered_alignment
+
+        # Bỏ qua một dòng
+        sheet.append([])
+
+        # Đặt định dạng in đậm cho các ô A3, B3, C3, D3, E3, F3 và thêm dữ liệu
+        headers = ['STT', 'Thời gian', 'Tên cây', 'Ảnh', 'Bệnh lý']
+
+        for idx, header in enumerate(headers, start=1):
+            cell = sheet.cell(row=3, column=idx)
+            cell.value = header
+            cell.font = bold_font
+            cell.alignment = centered_alignment
+
+        # Thêm dữ liệu vào các ô A4, B4, C4, D4, E4, F4
+        data = []
+        i = 1
+        for item in records:
+            row = [
+                i,
+                item[0].strftime("%d-%m-%Y %H:%M:%S"),
+                item[1],
+                f'disease_detection/static/disease_detection/upload/{item[2]}',
+                item[3]
+            ]
+            i = i + 1
+            data.append(row)
+
+
+        for r_idx, row in enumerate(data, start=0):
+            sheet.row_dimensions[r_idx + 4].height = 120
+            for idx, value in enumerate(row, start=1):
+                cell = sheet.cell(row=data.index(row) + 4, column=idx)
+                if idx != 4:
+                    cell.value = value
+                    cell.alignment = centered_alignment
+                else:
+                    # Xác định vị trí của hình ảnh
+                    image_path = value
+                    img = Image.open(image_path)
+
+                    # img_width, img_height = img.size
+                    img_width, img_height = (150, 150)
+
+                    # Tạo một đối tượng hình ảnh trong tệp Excel
+                    excel_image = ExcelImage(img)
+                    excel_image.width = img_width
+                    excel_image.height = img_height
+                    cell.value = ''
+
+                    # Chèn hình ảnh vào ô
+                    cell.alignment = centered_alignment
+                    sheet.add_image(excel_image, cell.coordinate)
+
+        col_dict = {
+            1: 'A', 2: 'B', 3: 'C', 4: 'D', 5: 'E'
+        }
+        # Tự động đặt kích thước cột theo nội dung của ô (ngoại trừ cột D)
+        for col in sheet.columns:
+            max_length = 0
+            column = col[0].column  # Get the column name
+            if column != 4:  # Bỏ qua cột D
+                for cell in col:
+                    try:  # Necessary to avoid error on empty cells
+                        if len(str(cell.value)) > max_length:
+                            max_length = len(cell.value)
+                    except:
+                        pass
+                adjusted_width = (max_length + 2)
+                sheet.column_dimensions[col_dict[column]].width = adjusted_width
+
+        # Tạo một BytesIO để lưu workbook vào bộ nhớ
+        buff = io.BytesIO()
+        workbook.save(buff)
+        buff.seek(0)
+
+        # Tạo một HTTP response với tệp Excel
+        response = HttpResponse(content=buff.read(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = f'attachment; filename=esp32_data_{round(datetime.timestamp(datetime.now()))}.xlsx'
+
+        return response
