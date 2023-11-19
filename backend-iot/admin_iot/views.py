@@ -173,7 +173,7 @@ class CrudUser(BaseView):
             })
             return HttpResponse(res, content_type='application/json', status=400)
 
-        if valid(regexPassword, editDTO.get('password')) == False:
+        if valid(regexPassword, editDTO.get('password')) == False and editDTO.get('password') != '':
             res = json.dumps({
                 "statusCode": 400,
                 "message": "Wrong Password Format!"
@@ -195,6 +195,7 @@ class CrudUser(BaseView):
             })
             return HttpResponse(res, content_type='application/json', status=400)
         
+        user = user[0]
         avatar = request.FILES.get('avatar')
         avatar_name = 'default.jpg'
         if avatar != None:
@@ -206,7 +207,7 @@ class CrudUser(BaseView):
         
         user = User(
             email=editDTO.get('email'),
-            password=Bcrypt.hashpw(editDTO.get('password')),
+            password=Bcrypt.hashpw(editDTO.get('password')) if editDTO.get('password') != '' else user.password,
             username=editDTO.get('username'),
             phone=editDTO.get('phone'),
             is_admin=False,
@@ -311,7 +312,7 @@ class UpdateUser(BaseView):
             })
             return HttpResponse(res, content_type='application/json', status=400)
 
-        if valid(regexPassword, editDTO.get('password')) == False:
+        if valid(regexPassword, editDTO.get('password')) == False and editDTO.get('password') != '':
             res = json.dumps({
                 "statusCode": 400,
                 "message": "Wrong Password Format!"
@@ -350,7 +351,7 @@ class UpdateUser(BaseView):
                 writer.write(chunk)
         
         user.email = editDTO.get('email')
-        user.password = Bcrypt.hashpw(editDTO.get('password'))
+        user.password = Bcrypt.hashpw(editDTO.get('password')) if editDTO.get('password') != '' else user.password
         user.username = editDTO.get('username')
         user.phone = editDTO.get('phone')
         user.is_admin = False

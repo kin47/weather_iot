@@ -7,7 +7,7 @@
 // });
 
 const piwv = 5;
-const iip = 20;
+const iip = 5;
 
 function renderTable(response, currentPage) {
     const data = response['dataOfPage'];
@@ -29,10 +29,11 @@ function renderTable(response, currentPage) {
             <tr>
                 <td>${item.STT}</td>
                 <td>${item.sentAt}</td>
-                <td>${item.nhietDo}°C</td>
-                <td>${item.doAmKhongKhi}%</td>
-                <td>${item.anhSang} lx</td>
-                <td>${item.doAmDat}%</td>
+                <td>${item.tree}</td>
+                <td>
+                    <img src="${prefixUrl}${item.image}" style="width: 150px; height: 150px; object-fit: cover;"/>
+                </td>
+                <td>${item.disease}</td>
             </tr>`;
     }
     
@@ -43,7 +44,7 @@ function renderTable(response, currentPage) {
     if (totalPages == 1) {
         return;
     }
-    
+
     phanTrang.style.display = 'block';
     const startPage = response['startPage'];
     const endPage = response['endPage'];
@@ -82,7 +83,7 @@ function renderTable(response, currentPage) {
     document.querySelectorAll('.numb').forEach(record => {
         const index = parseInt(record.classList[1].split('-')[1]);
         record.onclick = () => {
-            let url = `api/esp32/data?piwv=${piwv}&iip=${iip}&page=${index}`;
+            let url = `api/disease-detection/history-predict-disease?piwv=${piwv}&iip=${iip}&page=${index}`;
             const startDate = document.querySelector('#start-date').value;
             const endDate = document.querySelector('#end-date').value;
 
@@ -114,7 +115,7 @@ function renderTable(response, currentPage) {
 }
 
 document.querySelector('#btn-loc-du-lieu').onclick = () => {
-    let url = `api/esp32/data?piwv=${piwv}&iip=${iip}&&page=1`;
+    let url = `api/disease-detection/history-predict-disease?piwv=${piwv}&iip=${iip}&&page=1`;
     const startDate = document.querySelector('#start-date').value;
     const endDate = document.querySelector('#end-date').value;
 
@@ -143,7 +144,7 @@ document.querySelector('#btn-loc-du-lieu').onclick = () => {
 }
 
 document.querySelector('#btn-export-excel').onclick = () => {
-    let url = `api/esp32/data/export-excel`;
+    let url = `api/disease-detection/history-predict-disease/export-excel`;
     const startDate = document.querySelector('#start-date').value;
     const endDate = document.querySelector('#end-date').value;
 
@@ -161,7 +162,7 @@ document.querySelector('#btn-export-excel').onclick = () => {
                 // Tạo một thẻ 'a' để tải tệp
                 var a = document.createElement('a');
                 a.href = url;
-                a.download = `esp32_data_${new Date().getTime()}.xlsx`;
+                a.download = `history_predict_disease_${new Date().getTime()}.xlsx`;
 
                 // Thêm thẻ 'a' vào body và kích hoạt nó
                 document.body.appendChild(a);

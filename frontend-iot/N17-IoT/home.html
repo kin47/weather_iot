@@ -56,6 +56,21 @@
 						</a>
 					</li>
 					<li class="nav-item">
+						<a class="nav-link" href="history_predict_disease.html">
+							Lịch sử đoán bệnh
+						</a>
+					</li>
+					<li class="nav-item fn-admin" style="display: none;">
+						<a class="nav-link" href="./admin/manage_user.html">
+							Quản lý người dùng
+						</a>
+					</li>
+					<li class="nav-item fn-admin" style="display: none;">
+						<a class="nav-link" href="./admin/manage_drive.html">
+							Quản lý thiết bị
+						</a>
+					</li>
+					<li class="nav-item">
 						<a class="nav-link" href="profile.html">
 							Thông tin cá nhân
 						</a>
@@ -127,7 +142,7 @@
 
 					<div class="row mb-4">
 						<div class="card width-70 height-800">
-							<div class="card-body">
+							<div class="card-body" style="background-color: #fff;">
 								<div class="d-flex justify-content-between align-items-start flex-wrap">
 									<div>
 										<p class="mb-3">Biểu đồ môi trường</p>
@@ -140,7 +155,7 @@
 							</div>
 						</div>
 
-						<div class="card width-27">
+						<div class="card width-27" style="background-color:  #fff;">
 							<div class="height-50pt text-center position-relative">
 								<p style="margin-top: 50px;">Đèn:</p>
 								<p id="led-result-1">Tắt</p>
@@ -183,8 +198,9 @@
 	</div>
 
 
-
-	<script src="/js/utils.js" defer async></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+	<script src="/js/utils.js"></script>
+	<script src="/js/authentication.js"></script>
 	<script src="/js/menu.js" defer async></script>
 	<script src="/js/chart.min.js"></script>
 	<script src="/js/switch.js"></script>
