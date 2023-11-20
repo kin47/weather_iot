@@ -6,10 +6,15 @@
     <!-- Required meta tags -->
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Actions</title>
+    <title>N17-IoT | Predict</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/disease_detection.css">
     <link rel="icon" type="image/x-icon" href="../../assets/img/tree.ico">
+    <style>
+        #detect-disease-btn:hover {
+            opacity: 0.8;
+        }
+    </style>
 </head>
 
 <body>
@@ -51,6 +56,21 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="history_predict_disease.html">
+                            Lịch sử đoán bệnh
+                        </a>
+                    </li>
+                    <li class="nav-item fn-admin" style="display: none;">
+                        <a class="nav-link" href="./admin/manage_user.html">
+                            Quản lý người dùng
+						</a>
+					</li>
+                    <li class="nav-item fn-admin" style="display: none;">
+                        <a class="nav-link" href="./admin/manage_drive.html">
+                            Quản lý thiết bị
+						</a>
+					</li>
+                    <li class="nav-item">
                         <a class="nav-link" href="profile.html">
                             Thông tin cá nhân
                         </a>
@@ -65,7 +85,7 @@
             <!-- partial -->
             <div class="main-panel">
                 <div class="content-wrapper">
-                    <h4 class="h4-data">Nhận diện bệnh</h4>
+                    <h4 class="h4-data" style="font-size: 32px; font-weight: 600;">Nhận diện bệnh</h4>
 
                     <!-- add spacing between title and table -->
                     <div class="sh20"></div>
@@ -111,7 +131,8 @@
     </div>
 
 </body>
-<script src="/js/utils.js" defer async></script>
+<script src="/js/utils.js"></script>
+<script src="/js/authentication.js"></script>
 <script src="/js/menu.js" defer async></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="/js/disease_detection.js" defer async></script>

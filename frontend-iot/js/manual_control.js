@@ -28,7 +28,8 @@ leds.forEach((item, index) => {
             "token": localStorage.getItem('accessToken') ? localStorage.getItem('accessToken') : 'abcxyz',
             "first": 0,
             "ledMode": ledCount[0],
-            "pumpMode": ledCount[1]
+            "pumpMode": ledCount[1],
+            "drive": index == 0 ? "LED" : "PUMP"
         }));
     }
 });

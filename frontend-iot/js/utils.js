@@ -1,6 +1,6 @@
 const port = 8000;
-const domain = '192.168.1.109';
-prefixUrl = `http://${domain}:${port}/`;
+const domain = '192.168.1.10';
+const prefixUrl = `http://${domain}:${port}/`;
 
 function redirect(url) {
     console.log(url);
@@ -10,7 +10,10 @@ function redirect(url) {
     aTag.click();
 }
 
-async function callAPI(url, method,  data=null, handler) {
+function callAPI(url, method,  data=null, handler) {
+    if (data instanceof FormData) {
+        console.log(data.get('jsonData'));
+    }
     apiUrl = `${prefixUrl}${url}`;
     accessToken = localStorage.getItem('accessToken') ? localStorage.getItem('accessToken') : 'abcxyz';
 
@@ -20,12 +23,11 @@ async function callAPI(url, method,  data=null, handler) {
     xhr.addEventListener("readystatechange", handler);
 
     xhr.open(method, apiUrl, true);
-    xhr.setRequestHeader("Content-Type", "application/json");
     xhr.setRequestHeader("Authorization", `Bearer ${accessToken}`);
     xhr.send(data);
 }
 
-async function callAPIDowload(url, method,  data=null, handler) {
+function callAPIDowload(url, method,  data=null, handler) {
     apiUrl = `${prefixUrl}${url}`;
     accessToken = localStorage.getItem('accessToken') ? localStorage.getItem('accessToken') : 'abcxyz';
 
@@ -47,6 +49,10 @@ function unauthorizedPage() {
 
 function badGetWay() {
     redirect(`http://${document.domain}:${location.port}/N17-IoT/error/502_badgetway.html`);
+}
+
+function homePage() {
+    redirect(`http://${document.domain}:${location.port}/N17-IoT/home.html`)
 }
 
 const wsURLPrefix = `ws://${domain}:${port}/`;

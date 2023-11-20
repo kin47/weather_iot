@@ -12,7 +12,13 @@ class User(models.Model):
     username = models.CharField(max_length=255, db_column='username')
     password = models.CharField(max_length=255, db_column='password')
     phone = models.CharField(max_length=255, db_column='phone')
-    is_admin = models.BooleanField(default=False, db_column='is_admin')
+    is_admin = models.BooleanField(default=False, db_column='is_admin', null=False)
+    avatar = models.CharField(max_length=255, default='default.jpg', db_column='avatar')
+    doan_benh = models.BooleanField(default=True, db_column='doan_benh', null=False)
+    xem_export_lich_su_doan_benh = models.BooleanField(default=True, db_column='xem_export_lich_su_doan_benh', null=False)
+    xem_export_du_lieu_moi_truong = models.BooleanField(default=True, db_column='xem_export_du_lieu_moi_truong', null=False)
+    bat_tat_led = models.BooleanField(default=True, db_column='bat_tat_led', null=False)
+    bat_tat_pump = models.BooleanField(default=True, db_column='bat_tat_pump', null=False)
     
     def __str__(self) -> str:
         return self.email

@@ -12,9 +12,21 @@
     <link rel="stylesheet" href="/css/profile.css">
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <style>
-        #btn-change-pasword:hover {
+        #btn-change-pasword:hover, #btn-update-info:hover {
             opacity: 0.8;
         }
+
+		#email {
+			cursor: not-allowed;
+		}
+
+		input[type='text'] {
+			border: 1px solid;
+		}
+
+		#avatar-img {
+			object-fit: cover;
+		}
     </style>
 </head>
 
@@ -57,6 +69,21 @@
 						</a>
 					</li>
 					<li class="nav-item">
+						<a class="nav-link" href="history_predict_disease.html">
+							Lịch sử đoán bệnh
+						</a>
+					</li>
+					<li class="nav-item fn-admin">
+						<a class="nav-link" href="./admin/manage_user.html">
+							Quản lý người dùng
+						</a>
+					</li>
+					<li class="nav-item fn-admin" style="display: none;">
+						<a class="nav-link" href="./admin/manage_drive.html">
+							Quản lý thiết bị
+						</a>
+					</li>
+					<li class="nav-item">
 						<a class="nav-link" href="profile.html">
 							Thông tin cá nhân
 						</a>
@@ -77,7 +104,7 @@
 								<div class="row">
 									<div class="col-md-4">
 										<div class="profile-img">
-											<img class="avatar-img" src="/assets/img/user_avatar.png" alt="" />
+											<img class="avatar-img" id="avatar-user" src="/assets/img/user_avatar.png" alt="" />
 										</div>
 									</div>
 									<div class="col-md-6">
@@ -114,7 +141,7 @@
 														style="color: #d62976;"></i></a>
 											</div>
 											<div style="height: 20px;"></div>
-											<a href="" style="font-weight: 500; color: blue;">Đổi mật khẩu</a>
+											<a href="#change-password-wapper" style="font-weight: 500; color: blue;">Đổi mật khẩu</a>
 										</div>
 									</div>
 									<div class="col-md-8">
@@ -126,7 +153,7 @@
 														<label>Email:</label>
 													</div>
 													<div class="col-md-6">
-														<p class="email">None</p>
+														<input type="text" id="email" name="email" disabled/>
 													</div>
 												</div>
 												<div class="row">
@@ -134,7 +161,7 @@
 														<label>Tên người dùng:</label>
 													</div>
 													<div class="col-md-6">
-														<p class="username-description">None</p>
+														<input type="text" id="username-description" name="username-description"/>
 													</div>
 												</div>
 												<div class="row">
@@ -142,10 +169,10 @@
 														<label>Số điện thoại:</label>
 													</div>
 													<div class="col-md-6">
-														<p class="phone">None</p>
+														<input type="text" id="phone" name="phone"/>
 													</div>
 												</div>
-												<div class="row">
+												<!-- <div class="row">
 													<div class="col-md-6">
 														<label>Chuyên ngành:</label>
 													</div>
@@ -160,16 +187,23 @@
 													<div class="col-md-6">
 														<p class="phone">Kỹ sư IoT</p>
 													</div>
-												</div>
+												</div> -->
 											</div>
 										</div>
+										<div style="
+											display: flex; background-color: #24c078; width: 100px; height: 40px;
+											border-radius: 6px; cursor: pointer; margin-left: 0%; margin-top: 10px; color: #fff;"
+											id="btn-update-info">
+											<span style="font-weight: 700; margin: auto;">Cập nhật</span>
+										</div>
 									</div>
+
 								</div>
 							</form>
 						</div>
 					</div>
 					<div style="height: 200px"></div>
-					<div class="row width-70 card change-password-zone">
+					<div class="row width-70 card change-password-zone" id="change-password-wapper">
 						<h5>Đổi mật khẩu</h5>
 						<div style="height: 50px;"></div>
 						<div class="row">
@@ -206,7 +240,7 @@
 						</div>
                         <div style="
                             display: flex; background-color: #24c078; width: 100px; height: 40px;
-                            border-radius: 6px; cursor: pointer; margin-left: 40%; margin-top: 10px;"
+                            border-radius: 6px; cursor: pointer; color: #fff;"
                             id="btn-change-pasword">
                             <span style="font-weight: 700; margin: auto;">Xác nhận</span>
                         </div>
@@ -217,6 +251,7 @@
 	</div>
 </body>
 <script src="/js/utils.js" defer async></script>
+<script src="/js/authentication.js" defer async></script>
 <script src="/js/menu.js" defer async></script>
 <script src="/js/profile.js" defer async></script>
 

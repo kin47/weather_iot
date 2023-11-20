@@ -63,6 +63,21 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="history_predict_disease.html">
+                            Lịch sử đoán bệnh
+                        </a>
+                    </li>
+                    <li class="nav-item fn-admin">
+                        <a class="nav-link" href="./admin/manage_user.html">
+                            Quản lý người dùng
+						</a>
+					</li>
+                    <li class="nav-item fn-admin" style="display: none;">
+                        <a class="nav-link" href="./admin/manage_drive.html">
+							Quản lý thiết bị
+						</a>
+					</li>
+                    <li class="nav-item">
                         <a class="nav-link" href="profile.html">
                             Thông tin cá nhân
                         </a>
@@ -88,11 +103,11 @@
                     </div>
 
                     <div style="display: flex; flex-direction: row-reverse; margin-top: 25px;">
-                        <div id="btn-export-excel" style="display: flex; width: 150px; height: 40px;
+                        <div id="btn-export-excel" style="display: flex; width: 150px; height: 40px; color: #fff;
                             border-radius: 6px; background-color: #24c078; font-weight: 600; cursor: pointer; margin-right: 12px;">
                             <span style="margin: auto;">Export excel <i class="fa-solid fa-file-export"></i></span>
                         </div>
-                        <div id="btn-loc-du-lieu" style="display: flex; width: 150px; height: 40px;
+                        <div id="btn-loc-du-lieu" style="display: flex; width: 150px; height: 40px; color: #fff;
                             border-radius: 6px; background-color: #24c078; font-weight: 600; cursor: pointer; margin-right: 12px;">
                             <span style="margin: auto;">Lọc dữ liệu <i class="fa-solid fa-filter"></i></span>
                         </div>
@@ -103,12 +118,12 @@
                     <div class="boc-bang" style="padding-bottom: 0px; overflow-x: unset;">
                         <table class="danhSach" id="myTable">
                             <thead class="hang1">
-                                <th data-sort class="stt">STT</th>
-                                <th data-sort class="time-data">Thời gian đo</th>
-                                <th data-sort class="data-col">Nhiệt độ</th>
-                                <th data-sort class="data-col">Độ ẩm không khí</th>
-                                <th data-sort class="data-col">Cường độ ánh sáng</th>
-                                <th data-sort class="data-col">Độ ẩm đất</th>
+                                <th data-sort class="stt" style="font-size: 14px; font-weight: 600;">STT</th>
+                                <th data-sort class="time-data" style="font-size: 14px; font-weight: 600;">Thời gian đo</th>
+                                <th data-sort class="data-col" style="font-size: 14px; font-weight: 600;">Nhiệt độ</th>
+                                <th data-sort class="data-col" style="font-size: 14px; font-weight: 600;">Độ ẩm không khí</th>
+                                <th data-sort class="data-col" style="font-size: 14px; font-weight: 600;">Cường độ ánh sáng</th>
+                                <th data-sort class="data-col" style="font-size: 14px; font-weight: 600;">Độ ẩm đất</th>
                             </thead>
                             <tbody>
                             </tbody>
@@ -146,7 +161,8 @@
     </div>
 
 </body>
-<script src="/js/utils.js" defer async></script>
+<script src="/js/utils.js"></script>
+<script src="/js/authentication.js"></script>
 <script src="/js/menu.js" defer async></script>
 <script src="/js/all_data.js" defer async></script>
 <!-- <script src="/js/pagination.js"></script>
